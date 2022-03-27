@@ -10,7 +10,7 @@ Thoughts:
 Relevance:
 Critique:
 Where-to:
---------------------
+-------------------- Week 1
 --------------------1
 
 Multi-Agent Deep Reinforcement Learning for Computation Offloading and Interference Coordination in Small Cell Networks.
@@ -171,6 +171,7 @@ Problem is described well; mainly looking into management systems for BMS's, and
 Where-to:
 From here, I think that Iterative approaches can be useful; but not necessary. I want the project to focus more on the architecture than the algorithm, but i should discuss with Kevin and Jean-Guy about the main focus of the project. 
 
+-------------------- Week 2
 --------------------9
 *********************
 Mobile Edge Computing: A Survey on Architecture and Computation Offloading
