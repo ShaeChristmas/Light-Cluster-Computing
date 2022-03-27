@@ -1,0 +1,334 @@
+Paper Review Initial Thoughts:
+Format:
+
+Title:
+Link:
+Source:
+DOI:
+Search Terms / how found:
+Thoughts:
+Relevance:
+Critique:
+Where-to:
+--------------------
+--------------------1
+
+Multi-Agent Deep Reinforcement Learning for Computation Offloading and Interference Coordination in Small Cell Networks.
+Link: https://ieeexplore.ieee.org.ezproxy-b.deakin.edu.au/document/9485089
+Source: IEEE Transactions on Vehicular Technology (volume: 70, Issue: 9, sept 2021)
+DOI: 10.1109/TVT.2021.3096928
+Search Terms: Offloading, Local, Pervasive, Latency
+
+Thoughts:
+This paper is mainly focusing on the resource allocation method for MEC devices. In the case of this paper, offloading those particular computations to an array of low cost devices is not present, but it does present the method for allocating resources with multiple UE's connected to the same MEC system.
+
+Relevance:
+At this stage, this paper is more useful in understanding how offloading works, as well as understanding these dynamic systems when multiple UE's are on the same network. However, when expanding the system to more devices, being mindful of the technique used to do so is important. 
+
+Critique:
+Very dense paper, a lot of math. The paper does describe their proposed method well, as well as reviewing previous methods and an extensive literature review. Additionally, the simulation setup is described well,, to a point where it could be repeated. However, as the paper does focus on a Machine Learning method, exact replication may be a bit tricky without the specific Machine learning setup.
+
+Where-to:
+From here, I think looking mainly at papers that focus on Architecture is a good idea, however starting out with a paper like this gives me a much better idea of how robust the end system does need to be.
+
+--------------------2
+
+NOSCM: A Novel Offloading Strategy for NOMA- Enabled Hierarchical Small Cell Mobile-Edge Computing
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/9279268
+Source: IEEE Internet of Things Journal (vol: 8, Issue: 10, may 2021)
+DOI: 10.1109/JIOT.2020.3042318
+Search Terms / how found: Offloading, Local, Architecture, MEC
+Thoughts: 
+Honestly, It relatively similar to what I was originally invisioning for this project. This paper talks about Small Cell Networks (SCN) but mainly focusing on the Algorithm for resource allocation. This is not something that we are looking at in this stage of the project, however, understanding how SCNs function as an Architecture is useful for designing a similar architecture. It should be noted that SCN still uses Bottom-Up approach for Offloading. In addition, the distribution of tasks is not "distributed" to slave devices, but still sent to cloud. Interestingly, one problem that may arrise is bandwidth limitations. SCN may need to be limited to a smaller number of devices (still like 30+, but not like 100+ (not exact figure))
+
+Relevance:
+Discusses interesting Architecture for Offloading networks (SCN), but still doesn't offload to existing devices, aand still focuses on the Offloading algorithm rather than the architecture.
+
+Critique:
+Paper follows an optimisation problem, and describes the method used and reasoning behind this very well. Additionally, the conclusions drawn from the new proposed algorithm were sound given the data, and the paper identified what needed to be considered in future research.
+
+Where-to:
+More focus on the architecture of the final system, but alsolooking at IoT devices being used rather than Cloud distributions.
+
+--------------------3
+
+A Computation Offloading Framework for Soft Real-Time Embedded Systems
+Link:https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/7176032/
+Source: 2015 27th Euromicro Conference on Real-Time Systems
+DOI: 10.1109/ECRTS.2015.19
+Search Terms / how found: Pervasive, Local, Offloading.
+
+Thoughts:
+Finally a Paper using IoT Devices. However, this paper focuses on Offloading IoT device tasks, not offloading to idle devices. Main focus is on Soft Real Time Constraints (time constraints in data, not in program runtime). Additionally, focuses less on physical implementation and instead on the Algorithm used. The general setup does however have some interesting components, given in the most clear way I have seen in a paper thus far (fig 1). Also deals with suspension of tasks on device to allow for offloading (my understanding is the task is suspended until the offloading result is returned). They used Matrix Multiplication to test system.
+
+Relevance:
+Performs offloading for IoT devices, with a relevant setup. Whilst aspects of the setup are unrealistic for deployed use (ie. 1 device 1 server, no other devices in network etc.), good proof of concept for the Algorithm. Dealing with a multitude of requests may cause issues however.
+
+Critique:
+Paper doesn't seem to have a lot of past research referenced in offloading real-time contexts. Formal model is described in depth, but implementation is less exact. Additionally, the Offloading decisions are not made in realtime, which would be unrealistic for deployed applications. Mathematical model used to outline algorithm based on many assumptions, leading to future works.
+
+Where-to:
+Still more focus in architecture, but including IoT devices. Additionally, embedded systems can be used in a similar way. Further, look into QoS and latency of operations. 
+
+--------------------4
+
+Decentralized Computation Offloading in IoT Fog Computing System with Energy Harvesting: A Dec-POMDP Approach
+https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/8981923
+Source: IEEE Internet of Things Journal ( Volume: 7, Issue: 6, June 2020)
+DOI: 10.1109/JIOT.2020.2971323
+Search Terms / how found: Pervasive, Local, Offloading.
+
+Thoughts:
+Again, Offloading is from IoT devices, rather than to IoT devices. However, the proposed system is interesting, as their decision maker (do computations local or not). Deals with devices not knowing the full state of the system (using a Fog Architecture) using a Dec-POMDP (decentralized Partially Observable Markov Decision Process). Learning Models are popular in this space, i guess as clearly defining a ruleset for how program allocation occurs is not the most efficient method (finding the optimal solution is a High Complexity Problem).
+
+Relevance:
+Fog Computing for the MEC system is relevant as ideally having multiple nodes will allow for more devices to offload computations. Also, describes in depth the Simulation (important) used to demo the algorithm
+
+Critique:
+Conclusion does not clarify results, only stating methodology of paper. Good discussion of past works. Outline of simulation architecture works well, as well as outline of problem statement and steps to obtain solution. Overall, not too bad.
+
+Where-to:
+I seem to be getting more papers aligned with IoT and Offloading, but more investigation into distributed IoT systems might be worth looking at.
+
+--------------------5
+********************
+TODG: Distributed Task Offloading With Delay Guarantees for Edge Computing
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/9591418
+Source: IEEE Transactions on Parallel and Distributed Systems ( Volume: 33, Issue: 7, July 1 2022)
+DOI: 10.1109/TPDS.2021.3123535
+Search Terms / how found: IoT, Offloading, Distributed
+
+Thoughts:
+Finally a paper that looks at Distributing Offloaded Tasks. Edge computing in this context looks at the architecture supporting distributed systems. Additionally, this looks at offloading the actual operation, which is very close to what is being covered in this project. However, it appears that they are not worrying about the location constraint by making the distributed system internet accessable for a large variety of devices (doesn't need to be on the same router). Floating between networks may cause problems after all, so this is a valid method. Additionally appears that the individual tasks being offloaded are not offloaded to an array of smaller devices, but instead to a number of edge servers, and VM's. Friendly paper to new-comers.
+
+Relevance:
+looks at distributing Offloaded Tasks, as well as looking at time constraints and optimisation of tasks.
+
+Critique:
+Properly outlines setup and problem statement. Describes contraints and limitations of system well, and outlines results. Good exploration of past works, as well as exploration of future work on the same system. Overall, I think this paper is a really good example of what i need to do in my own paper (it is very long and dense though). Isn't cited anywhere though, so i may need some clarification, given the specifics of this area are niche.
+
+Where-to:
+Look into the related works/citations for this paper, in addition to these search terms + "local"
+
+********************
+--------------------6
+
+Joint Computation Offloading and Multiuser Scheduling Using Approximate Dynamic Programming in NB-IoT Edge Computing System
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/8648197
+Source: IEEE Internet of Things Journal ( Volume: 6, Issue: 3, June 2019)
+DOI: 10.1109/JIOT.2019.2900550
+Search Terms / how found: IoT, Offloading, Distributed.
+
+Thoughts:
+Looks at a system architecture which takes advantage of local MEC servers attached to IoT access points. Also uses a slightly different communication (NB-IoT) based on Celular (rather than wireless) technologies (look at Radio Resource Allocation Problems for more context). Still looks at algorithm more closely than architecture.
+
+Relevance:
+Semi-distributed (mine will be fully distributed), and use of IoT edge computing. However, distribution is still between external nodes. Interesting to look at different communication methods (maybe take advantage of devices that don't communicate using wireless?)
+
+Critique:
+Outlines problem and related works well, as well as model. Appraoches all aspects of the requirements, but still uses a simulation rather than a physical demo (im still skeptical of how these can be manipulated). Describes where to for future works, and discusses results well.
+
+Where-to:
+I think from here, i need to move away from looking at Offloading for a little bit, mainly to look at distribution of Offloaded tasks. More specifically, looking at Dynamic programming practices to allow for dynamic task offloading.
+
+--------------------7
+
+Efficient Computation Offloading in Mobile Edge Computing Based on Dynamic Programming
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/9327285
+Source: 2020 Chinese Automation Congress (CAC)
+DOI: 10.1109/CAC51589.2020.9327285
+Search Terms / how found: Offloading, Dynamic, Distributed
+
+Thoughts:
+This paper looks at the energy efficency of offloading using MEC, mainly looking at Cost Minimisation. Still looking at Algorithms, but closer to the type of architecture im thinking of using.
+
+Relevance:
+Looks at energy cost of offloading using MEC (*In a simulation), as well as describing another algorithm for task allocation.
+
+Critique:
+Very Short paper (compared to other papers i've read), outline of goals and discussion of past works minimal, conclusion has no discussion of future works. I suspect that this paper was quick/rushed. Uses simulation to show findings...
+
+Where-to:
+Maybe avoid this source/author in future, however it depends on other works discovered in this area.
+
+--------------------8
+
+Multibattery Optimal Coordination Control for Home Energy Management Systems via Distributed Iterative Adaptive Dynamic Programming
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/7001611
+Source: IEEE Transactions on Industrial Electronics ( Volume: 62, Issue: 7, July 2015)
+DOI: 10.1109/TIE.2014.2388198
+Search Terms / how found: Dynamic Programming, Distributed / Concurrent
+
+Thoughts:
+Looks at a Multibattery management problem; mainly in the control of Smart Home energy Management systems. This uses Adaptive Dynamic Programming to find a useful control policy for resource schedueling. Applying a learning algorithm for ADP systems allows for realtime decision making to be made.
+
+Relevance:
+This paper shows how ADP and distributed programming can be used, but it also mainly looks at the math. Additionally, it does deal with Smart Home device Integration, but it also doesn't send any programs to these devices.
+
+Critique:
+Problem is described well; mainly looking into management systems for BMS's, and conclusions drawn are clear in the conclusion. Numerical analysis of data was sound; if not exact.
+
+Where-to:
+From here, I think that Iterative approaches can be useful; but not necessary. I want the project to focus more on the architecture than the algorithm, but i should discuss with Kevin and Jean-Guy about the main focus of the project. 
+
+--------------------9
+*********************
+Mobile Edge Computing: A Survey on Architecture and Computation Offloading
+Link: https://arxiv.org/pdf/1702.05309.pdf
+Source: IEEE Communications Surveys & Tutorials ( Volume: 19, Issue: 3, thirdquarter 2017)
+DOI: 10.1109/COMST.2017.2682318
+Search Terms / how found: Appropriated from Kevin.
+
+Thoughts:
+Literacture review / survey on the Mobile Edge Computing Area, mainly looking at system Architectures. Introduces Mobile Cloub Computing as a concept and discusses multiple ways it could be acheived. While this paper is long, it covers in depth the different Architectures that can be used with this type of allocation, their advantages and disadvantages.
+
+Relevance:
+Discusses in detail different architectures for offloading. Rough architecture designs / potential use cases will be very similar. Also aims to solve the same problem, but with less restriction on using cloud resources.
+
+Critique:
+Quite a Long paper, but as a review, it discusses a large amount of relevant information, puts all of the information into one context, and directly compares findings of papers for clear analysis. Finally, discusses open problems, and how these problems may be addressed.
+
+Where-to:
+From here, I think looking more at the technology rather than the Architecture will be useful (I have said this a lot, I've been searching for papers in batches). Additionally, through discussion with Kevin and Jean-Guy, I will look more into Dynamic Deployment rather than Dynamic Programming.
+
+********************
+--------------------10
+
+Dynamic Deployment Model for large-scale compute-intensive clusters.
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/9162887
+Source: IEEE INFOCOM 2020 - IEEE Conference on Computer Communications Workshops (INFOCOM WKSHPS)
+DOI: 10.1109/INFOCOMWKSHPS50562.2020.9162887
+Search Terms / how found: Dynamic Deployment
+
+Thoughts:
+Discusses Sub-Clustering of Physical Clusters into virtual clusters for multi-stage distributed operations (streaming for example). Achieves this clustering through a Dynamic Deployment method (Docker? lmao didn't know docker could do that I guess). This process is called Dynamic Configuration.
+
+Relevance:
+Uses Dynamic Deployment across multiple devices to complete an operation. However, this is less focused on Offloading technologies, and is instead looking at mutlistage cloud operations. Still relevant, as the methodology is similar to what would need to be done for the Lightbulbs, but done in a simulation of a cluster, rather than low computational power machines.
+
+Critique:
+Discusses in depth the current technologies in the area, as well as related works. Could describe the problem in more detail, but discusses the solution in a large amount of detail. Uses a virtual cluster for testing, and fully describes the method used for each part of the solution. Fully outlines results, but could use more description on the where-to-from-here.
+
+Where-to:
+Look more into Dynamic Deployment, specifically keeping in mind Googles MapReduce, as well as other offloading techniques.
+
+--------------------11
+
+Container-based virtual elastic clusters
+Link: https://www.sciencedirect.com/science/article/pii/S0164121217300146
+Source: 2017 Elsevier Inc.
+DOI: 10.1016/j.jss.2017.01.007
+Search Terms / how found: Found through Paper 10.
+
+Thoughts:
+Discusses using Containers to facilitate Elastic Clusters on a network of devices as an alternative to using Virtual Machines using a Hypervisor structure. Also has a really good description of past technologies, such as regular cluster computing, Virtual Elastic Clusters (VEC). Discusses architecture for container cluster deployment.
+
+Relevance:
+Describes a technology which could be very useful for the overall application. Also describes past technologies in great detail, would be useful to look for references to other technologies in past works section.
+
+Critique:
+Does a really good job of defining what technology is used, the hypothesis, as well as past technologies. Use cases for this technology are not very well defined, but are instead linked to use cases for older technologies. Goes into great depth compairing the experiment between the new and old technologies, and fully discusses the results. Finally, Future work is well outlined.
+
+Where-to:
+EC4Docker is definitely something I want to discuss, however I'm not 100% certain it will be useful for the final project. At the very least, its an interesting architecture to approach. From here, maybe a futher look into how VEC methods work might be useful, focusing on low computational machines.
+
+--------------------12
+
+Techniques for dynamic deployment of modules in context-aware Android Applications
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/7382915
+Source: 2015 16th IEEE International Symposium on Computational Intelligence and Informatics (CINTI)
+DOI: 10.1109/CINTI.2015.7382915
+Search Terms / how found: Dynamic Deployment
+
+Thoughts:
+Covers the basics of dynamic deployment of APK's (Android Application Packages) onto context aware devices. Whilst the device is different, the types of applications of this technology is not too different.
+
+Relevance:
+Fully outlines how dynamic deployment sometimes needs to be customised for the individual device running it. To create a more robust system, using something akin to docker containers would allow for more fluid application (works on a lot of devices).
+
+Critique:
+Approach, problem and related works cleariy outlined, however the specificity of the approach is not discussed. Methods are clearly outlined, as well as results from both methods implemented. No full comparision of the methods or previous methods takes place. Future works are clearly outlined, but not in full detail.
+
+Where-to:
+This was an interesting application of the dynamic deployment technology, but I think i need to focus on the deployment from previous papers (elastic clusters).
+
+--------------------13
+
+Expanding the Cloud: A Component-Based Architecture to Application Deployment on the Internet
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/5493434
+Source: 2010 10th IEEE/ACM International Conference on Cluster, Cloud and Grid Computing
+DOI: 10.1109/CCGRID.2010.14
+Search Terms / how found: Dynamic Deployment, Elastic Cluster
+
+Thoughts:
+Looks at component architecture for Web App development. It looks more useful for Cloud deployments as some of the technologies are more computationally expensive (ie. Web Requests would require database access ect.)
+
+Relevance:
+Looks at elastic resource allocation. Looks at applications of Elastic Clustering.
+
+Critique:
+Outlines the area and proposed works fairly well, but doesn't look too far into past works. Paper only proposes an architecture, does not do any testing of said architecture, and additionally, doesn't talk about any issues with the Architecture. Describes future works, but does not go into depth in any of the areas (which are also not mentioned anywhere in the description of the problem).
+
+Where-to:
+Look into low power device Clustering.
+
+--------------------14
+
+Dynamic Deployment and Management of Elastic Virtual Clusters
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/6051755
+Source: 2011 Sixth Annual Chinagrid Conference
+DOI: 10.1109/ChinaGrid.2011.31
+Search Terms / how found: Dynamic Deployment, Elastic Cluster
+
+Thoughts:
+Dynamic Deployment in the context of managing Virtual resources in Elastic Clusters.
+
+Relevance:
+Looks at Elastic Clustering, but in the context of Virtual Resource management. Uses Hypervisors for resource management, instead of using container management systems. Alternatively, it also looks at web applications rather than low computations.
+
+Critique:
+Describes the problem and usecase fairly well, however doesn't explore last works in depth. Does look well at experiment and results. Discusses a little bit of Future works, but not in depth.
+
+Where-to:
+Look at Low power devices using Elastic Clustering.
+
+--------------------15
+
+Enhanced Firworks Algorithm for Dynamic Deployment of Wireless Sensor Networks.
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/8210494
+Source: 2017 2nd International Conference on Frontiers of Sensors Technologies (ICFST)
+DOI: 10.1109/ICFST.2017.8210494
+Search Terms / how found: "Dynamic Deployment" or "Elastic Cluster", "Low Power Device"
+
+Thoughts:
+Seems to use a Virtual Cluster to look at the Fireworks algorithm using dynamic deployment. Could be enhanced by container deployment, but has no discussion of past works.
+
+Relevance:
+Looks at Dynamic network Deployment onto low power devices. Mainly looks at the Firework algorithm (swarm movement of drones), however it would be running on low power devices. Not Dynamic deployment, more closer to dynamic network connectivity.
+
+Critique:
+Paper introduces the problem but does not discuss past works. Discusses the algorithm and deployment method in the simulation. Discusses conclusion in fairly good detail, with comparison to other methods. Very little description of future work.
+
+Where-to:
+All of these papers dont set up physical systems, instead just running Virtual Clusters or simulations. I want a physical cluster, as I'll be using multiple different devices. Hence the focus on EC4Docker.
+
+--------------------16
+
+Predicatable Dynamic Deployment of components in embedded systems
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/6032608
+Source: 2011 33rd International Conference on Software Engineering (ICSE)
+Search Terms / how found: "Dynamic Deployment" or "Elastic Cluster", "Low Power Device"
+
+Thoughts:
+Call to research (lit review i guess) on dynamic deployment for components. Covers mainly dynamic reconfiguration (changing of scope of program whilst not making program go down). Proposes component validation.
+
+Relevance:
+Looks at a different method for dynamic programming/deployment methods. However, does not show any methods. Might be good to continue along this line, and see what papers may be related.
+
+Critique:
+Proposes some research, but doesn't do anything? Honestly surprised you can be published like this. Discusses problem, some past works, and the proposed solution fairly well, but stops there. Does define some restrictions/ specs for a proposed solution, but again, nothing is done/implemented. No experiment takes place. Does look at future works.
+
+Where-to:
+Look at related future works to this paper; use Research Plan key terms to search for more papers. 
+
+--------------------
