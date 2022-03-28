@@ -332,4 +332,18 @@ Proposes some research, but doesn't do anything? Honestly surprised you can be p
 Where-to:
 Look at related future works to this paper; use Research Plan key terms to search for more papers. 
 
+--------------------17
+
+Analysis of the silicon market: Will thin films profit?
+Link: https://www.sciencedirect.com/science/article/pii/S0301421506005210
+Source: Department of Science, Technology and Society, Copernicus Institute for Sustainable Development and Innovation, Utrecht University, Heidelberglaan 2, 3584 CS Utrecht, The Netherlands
+DOI: 10.1016/j.enpol.2006.12.017
+Search Terms / how found: "Silicon Shortage" on Google Scholar
+Thoughts: Nice and short paper discussing the Silicon Shortage that took place in 2007
+
+Relevance: Looking at sustainability of making new devices contantly, this paper helps to prove that new sustainable methods are required.
+
+Critique: Good analysis; doesn't present anything majorly new, but does summarise the Silicon shortage well, as well as its far reaching effects.
+
+Where-to: Include silicon in lit review.
 --------------------
