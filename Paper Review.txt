@@ -332,6 +332,7 @@ Proposes some research, but doesn't do anything? Honestly surprised you can be p
 Where-to:
 Look at related future works to this paper; use Research Plan key terms to search for more papers. 
 
+-------------------- Week 3
 --------------------17
 
 Analysis of the silicon market: Will thin films profit?
@@ -339,6 +340,7 @@ Link: https://www.sciencedirect.com/science/article/pii/S0301421506005210
 Source: Department of Science, Technology and Society, Copernicus Institute for Sustainable Development and Innovation, Utrecht University, Heidelberglaan 2, 3584 CS Utrecht, The Netherlands
 DOI: 10.1016/j.enpol.2006.12.017
 Search Terms / how found: "Silicon Shortage" on Google Scholar
+
 Thoughts: Nice and short paper discussing the Silicon Shortage that took place in 2007
 
 Relevance: Looking at sustainability of making new devices contantly, this paper helps to prove that new sustainable methods are required.
@@ -346,4 +348,64 @@ Relevance: Looking at sustainability of making new devices contantly, this paper
 Critique: Good analysis; doesn't present anything majorly new, but does summarise the Silicon shortage well, as well as its far reaching effects.
 
 Where-to: Include silicon in lit review.
---------------------
+--------------------18
+
+Green Initiatives in IoT
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/7972353
+Source: 2017 Third International Conference on Advances in Electrical, Electronics, Information, Communication and Bio-Informatics (AEEICB)
+DOI: 10.1109/AEEICB.2017.7972353
+Search Terms / how found: sustainability, IoT 
+
+Thoughts: 
+Simple paper looking into how sustainability can be used in IoT systems, as well as current works to make IoT systems more sustainable.
+
+Relevance:
+Project also covers sustainability, just in an entirely different manner. However, this would lead to an efficient usage of physical resources, rather than focusing on energy efficiency.
+
+Critique:
+Short paper, but it does go into good depth on the different green technologies required. Basically a lit review tho.
+
+Where-to:
+Include in lit review
+
+--------------------19
+
+Low-Cost Multicystalline Silicon Wafer by Purifying Metallurgical grade Silicon with Tin Solution
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/4059893
+Source: 2006 IEEE 4th World Conference on Photovoltaic Energy Conference
+DOI: 10.1109/WCPEC.2006.279679
+Search Terms / how found: Silicon, sustainability
+
+Thoughts:
+Looks at refinement method for Silicon for Solar applications. Reduces steps and complexity fairly well, in a resource and material efficient manner.
+
+Relevance:
+looks at other methods of sustainable technology sourcing (ie. instead of being materials aware, process aware).
+
+Critique:
+In depth paper, looking into the different methods done, explaining their method well, and showing experimental results. Overall, pretty good. Discussion of future work could be expanded.
+
+Where-to:
+Put in lit review
+
+--------------------20
+
+Recycling Edge Devices in Sustainable Internet of Things Networks.
+Link: https://ieeexplore-ieee-org.ezproxy-b.deakin.edu.au/document/7981334
+Source: IEEE Internet of Things Journal ( Volume: 4, Issue: 5, Oct. 2017)
+DOI: 10.1109/JIOT.2017.2727098
+Search Terms / how found: Recycling IoT devices
+
+Thoughts:
+Kinda close to what we want to do, in terms of recycling. Looks at reusing Edge devices to host VM requirements.
+
+Relevance:
+Sustainability/reuse of devices, whilst also being somewhat close to what we want to do lmao.
+
+Critique:
+This paper is sick; Covers the intro and motivations really well, as well as clearly stating that no past works have been done in this area (but they should have still looked at similar areas). System model is described, and results clearly stated (although a little too good to be true). No future works discussed tho :(
+
+Where-to:
+Put in Lit Review
+
+-------------------- 
