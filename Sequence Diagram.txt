@@ -1,0 +1,30 @@
+title Sequence of Offloading Request.
+
+Client Device -> IoT Device (Master): Send request for offloading to IoT device
+note over IoT Device (Master): The Request for Offloading needs to have the \n availability returned for all devices on the network.
+IoT Device (Master) ->(1)IoT Device (Slave 1): Request Availability
+IoT Device (Master) (1)<-- IoT Device (Slave 1): Return Availability
+
+IoT Device (Master) ->(1)IoT Device (Slave 2): Request Availability
+IoT Device (Master) (1)<-- IoT Device (Slave 2): Return Availability
+
+IoT Device (Master) ->(1)IoT Device (Slave 3): Request Availability
+IoT Device (Master) (1)<-- IoT Device (Slave 3): Return Availability
+
+Client Device <--IoT Device (Master): Confirmation, and request for offloaded packet
+
+Client Device ->IoT Device (Master): Send Data to be offloaded
+
+note over IoT Device (Master): The full information can now be simultaneously \n released to the responding IoT devices
+
+IoT Device (Master) ->(1)IoT Device (Slave 1): Send allocated packet
+IoT Device (Master) (1)<-- IoT Device (Slave 1): Return output of operation
+
+IoT Device (Master) ->(1)IoT Device (Slave 2): Send allocated packet
+IoT Device (Master) (1)<-- IoT Device (Slave 2): Return output of operation
+
+IoT Device (Master) ->(1)IoT Device (Slave 3): Send allocated packet
+IoT Device (Master) (1)<-- IoT Device (Slave 3): Return output of operation
+
+note over IoT Device (Master): All smaller parts of the output can now be \n collated, and sent back to the Client Device.
+Client Device <-- IoT Device (Master): Return Collated Output
