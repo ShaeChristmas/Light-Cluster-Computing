@@ -3,10 +3,12 @@ const fs = require("fs");
 var path = require("path");
 const app = express();
 var http = require("http");
+const querystring = require("query-string");
 
 // Is the device currently busy?
 var busy = false;
 var ips = require("./ips.json");
+//var matricies = require("./mats.json");
 
 const port = 5000;
 
@@ -15,83 +17,127 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 function mutliplyMatrixAndDot(matrix, point) {
-    // Found from https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
+  // Found from https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
+  //console.log("multiplyMatrixAndDot: " + matrix);
+  // Give a simple variable name to each part of the matrix, a column and row number
+  console.log("Matrix: " + matrix[3 * size + 3]);
+  console.log("Point: " + point);
+  size = Math.sqrt(matrix.length);
+  var returnRow = Array(size).fill(0);
+  console.log("size: " + size);
 
-    // Give a simple variable name to each part of the matrix, a column and row number
-    let c0r0 = matrix[ 0], c1r0 = matrix[ 1], c2r0 = matrix[ 2], c3r0 = matrix[ 3];
-    let c0r1 = matrix[ 4], c1r1 = matrix[ 5], c2r1 = matrix[ 6], c3r1 = matrix[ 7];
-    let c0r2 = matrix[ 8], c1r2 = matrix[ 9], c2r2 = matrix[10], c3r2 = matrix[11];
-    let c0r3 = matrix[12], c1r3 = matrix[13], c2r3 = matrix[14], c3r3 = matrix[15];
-  
-    // Now set some simple names for the point
-    let x = point[0];
-    let y = point[1];
-    let z = point[2];
-    let w = point[3];
-  
-    // Multiply the point against each part of the 1st column, then add together
-    let resultX = (x * c0r0) + (y * c0r1) + (z * c0r2) + (w * c0r3);
-  
-    // Multiply the point against each part of the 2nd column, then add together
-    let resultY = (x * c1r0) + (y * c1r1) + (z * c1r2) + (w * c1r3);
-  
-    // Multiply the point against each part of the 3rd column, then add together
-    let resultZ = (x * c2r0) + (y * c2r1) + (z * c2r2) + (w * c2r3);
-  
-    // Multiply the point against each part of the 4th column, then add together
-    let resultW = (x * c3r0) + (y * c3r1) + (z * c3r2) + (w * c3r3);
-  
-    return [resultX, resultY, resultZ, resultW];
-}
-
-function sendReq(ip,matrix, point) {
-    var request = http.request(
-        {
-          host: ip,
-          port: 5000,
-          path: "/sendComp",
-          method: "GET",
-        },
-        function (response) {
-          var data = "";
-          response.setEncoding("utf8");
-          response.on("data", (chunk) => {
-            data += chunk;
-          });
-          response.on("end", () => {
-            res.end(data);
-            console.log(data);
-          });
-        }
-      );
-      request.on("error", function (err) {
-        console.log("error: Device " + ips[i] + " not found");
-        console.log("error Message: " + err);
-      });
-      request.end();
-}
-
-function multiplyMatrices(matrixA, matrixB) {
-    // Slice the second matrix up into rows
-    let row0 = [matrixB[ 0], matrixB[ 1], matrixB[ 2], matrixB[ 3]];
-    let row1 = [matrixB[ 4], matrixB[ 5], matrixB[ 6], matrixB[ 7]];
-    let row2 = [matrixB[ 8], matrixB[ 9], matrixB[10], matrixB[11]];
-    let row3 = [matrixB[12], matrixB[13], matrixB[14], matrixB[15]];
-  
-    // Multiply each row by matrixA FIX THIS SO THAT EACH ROW IS SENT TO AN INDIVIDUAL DEVICE
-    let result0 = multiplyMatrixAndPoint(matrixA, row0);
-    let result1 = multiplyMatrixAndPoint(matrixA, row1);
-    let result2 = multiplyMatrixAndPoint(matrixA, row2);
-    let result3 = multiplyMatrixAndPoint(matrixA, row3);
-  
-    // Turn the result rows back into a single matrix
-    return [
-      result0[0], result0[1], result0[2], result0[3],
-      result1[0], result1[1], result1[2], result1[3],
-      result2[0], result2[1], result2[2], result2[3],
-      result3[0], result3[1], result3[2], result3[3]
-    ];
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      returnRow[i] += point[j] * matrix[size * i + j];
+    }
   }
+  return returnRow;
+}
+
+//TODO: NOT WORKING, UNDEFINED ON RESULT. FIX!!! needs to have a promise so that the value can be returned.
+/*
+function httpRequest(params, postData) {
+    return new Promise(function(resolve, reject) {
+        var req = http.request(params, function(res) {
+            // on bad status, reject
+            // on response data, cumulate it
+            // on end, parse and resolve
+        });
+        // on request error, reject
+        // if there's post data, write it to the request
+        // important: end the request req.end()
+    });
+}
+*/
+
+function sendReq(ip, matrix, point) {
+  return new Promise((resolve, reject) => {
+    //console.log("sendReq: "+ ip+ ' '+matrix)
+    var body = {
+      matrix: matrix,
+      point: point,
+    };
+    //console.log("vorkin?");
+    var postBody = querystring.stringify(body);
+    var options = {
+      host: ip,
+      port: 5000,
+      path: "/sendComp",
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": postBody.length,
+      },
+    };
+    var request = http.request(options, function (response) {
+      valueToReturn = null;
+      var data = "";
+      response.setEncoding("utf8");
+      response.on("data", (chunk) => {
+        data += chunk;
+        return data;
+      });
+      response.on("end", () => {
+        try {
+          valueToReturn = JSON.parse(data);
+        } catch {
+          reject(new Error(err));
+        }
+        console.log("data: " + eval(data)[1]);
+        resolve({
+          returnRow: eval(data)[1],
+        });
+      });
+    });
+    request.on("error", reject);
+    request.write(postBody);
+    request.end();
+    //console.log("Outside: "+ JSON.stringify(request.end()));
+  });
+}
+
+async function multiplyMatrices(matrixA, matrixB) {
+  // Check matrices size.
+  size = Math.sqrt(matrixA.length);
+  //console.log(size);
+  // Search through Rows.
+  var newMatrix = Array(size)
+    .fill(0)
+    .map(() => Array(size).fill(0));
+  var returnMatrix = Array(size)
+    .fill(0)
+    .map(() => Array(size).fill(0));
+  //console.log(newMatrix);
+  var nodev = ips.length;
+  var count = 0;
+
+  var promises = [];
+  for (let i = 0; i < size; i++) {
+    var point = new Array(size).fill(0);
+    for (let j = 0; j < size; j++) {
+      point[j] = matrixB[i + size * j];
+    }
+    // console.log("point: "+ point);
+    // Async before the below function works, but its technically sequential.
+    promises.push(
+      sendReq(ips[i % nodev], matrixA, point).then((data) => {
+        newMatrix[i] = data.returnRow;
+        console.log(data.returnRow);
+        count++;
+        console.log(count);
+      })
+    );
+  }
+  await Promise.all(promises);
+  // This code section is required, but i was wrapping it to try and make the code non-sequential.
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      returnMatrix[i][j] = newMatrix[j][i];
+    }
+  }
+  console.log(returnMatrix);
+  return returnMatrix;
+}
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -104,6 +150,7 @@ app.use(function (req, res, next) {
 
 // Required Info
 var info = require("./local.json");
+const { count } = require("console");
 let name = info.name;
 let ip = info.ip;
 let mac = info.mac;
@@ -145,7 +192,7 @@ app.get("/infoReq", (req, res) => {
         });
         response.on("end", () => {
           res.end(data);
-          console.log(data);
+          //console.log(data);
         });
       }
     );
@@ -157,7 +204,7 @@ app.get("/infoReq", (req, res) => {
   }
 });
 
-// Request for Computation
+// Request for Computation Response
 app.get("/reqComp", (req, res) => {
   res.send([ip, !busy]);
   console.log([ip, !busy]);
@@ -194,25 +241,28 @@ app.get("/compVal", async (req, res) => {
 });
 
 // Sending of Computation - Client recieving and sending.
-app.get("/getComp", (req,res) => {
-    try{
-        multiplyMatrices(req.body.matrixA, req.body.matrixB);
-    }catch{
-        console.log("oops");
-    }
+app.get("/getComp", async function (req, res) {
+  try {
+    console.log("/getComp: This runnig");
+    var result = await multiplyMatrices(req.body.matrixA, req.body.matrixB);
+    console.log("/getComp output: \n" + result);
+    res.send(result); //req.body.matrixA
+  } catch (exception) {
+    console.log("oops");
+    console.log(exception);
+  }
 });
 
 // Receiving of Computation - Receiving from Master
-app.get("/sendComp", (req,res) => {
-    busy = true;
-    var matrix = req.body.matrix;
-    var point = req.body.point;
-
-    var row = mutliplyMatrixAndDot(matrix, point);
-    res.send([info.ip, row]);
-    busy = false;
+app.get("/sendComp", (req, res) => {
+  busy = true;
+  //console.log(req);
+  var matrix = req.body.matrix;
+  var point = req.body.point;
+  var row = mutliplyMatrixAndDot(matrix, point);
+  res.send([info.ip, row]);
+  busy = false;
 });
-
 
 // Listen
 app.listen(port, () => {
