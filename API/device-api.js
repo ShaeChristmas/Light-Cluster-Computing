@@ -217,6 +217,7 @@ app.get("/compVal", async (req, res) => {
           port: 5000,
           path: "/reqComp",
           method: "GET",
+          timeout: 500
         },
         function (response) {
           var data = "";
@@ -230,6 +231,9 @@ app.get("/compVal", async (req, res) => {
           });
         }
         );
+        request.on("timeout", () => {
+          request.destroy();
+        });
         request.on("error", function (err) {
           console.log("error: Device " + ips[i] + " not found");
           console.log("error Message: " + err);
