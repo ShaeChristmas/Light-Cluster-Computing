@@ -34,22 +34,6 @@ function mutliplyMatrixAndDot(matrix, point) {
   return returnRow;
 }
 
-//TODO: NOT WORKING, UNDEFINED ON RESULT. FIX!!! needs to have a promise so that the value can be returned.
-/*
-function httpRequest(params, postData) {
-    return new Promise(function(resolve, reject) {
-        var req = http.request(params, function(res) {
-            // on bad status, reject
-            // on response data, cumulate it
-            // on end, parse and resolve
-        });
-        // on request error, reject
-        // if there's post data, write it to the request
-        // important: end the request req.end()
-    });
-}
-*/
-
 function sendReq(ip, matrix, point) {
   return new Promise((resolve, reject) => {
     //console.log("sendReq: "+ ip+ ' '+matrix)
@@ -173,17 +157,20 @@ app.get("/info", (req, res) => {
   });
 });
 
-// Get Device Information
-app.get("/infoReq", (req, res) => {
+// Get Device Information - not sure if will work with multiple devices.
+app.get("/infoReq", async (req, res) => {
+  promises = [];
   for (let i = 0; i < ips.length; i++) {
-    console.log("Testing:" + ips[i]);
-    var request = http.request(
-      {
-        host: ips[i],
-        port: 5000,
-        path: "/info",
-        method: "GET",
-      },
+    promises.push(new Promise((resolve, reject) => {
+      console.log("Testing:" + ips[i]);
+      var request = http.request(
+        {
+          host: ips[i],
+          port: 5000,
+          path: "/info",
+          method: "GET",
+          timeout: 500
+        },
       function (response) {
         var data = "";
         response.setEncoding("utf8");
@@ -192,16 +179,24 @@ app.get("/infoReq", (req, res) => {
         });
         response.on("end", () => {
           res.end(data);
+          resolve(data);
           //console.log(data);
         });
       }
-    );
-    request.on("error", function (err) {
-      console.log("error: Device " + ips[i] + " not found");
-      console.log("error Message: " + err);
-    });
-    request.end();
-  }
+      );
+      request.on("timeout", () => {
+        request.destroy();
+      });
+      request.on("error", function (err) {
+        console.log("error: Device " + ips[i] + " not found");
+        console.log("error Message: " + err);
+        reject("Not found");
+      });
+      request.end();
+    }));
+    }
+
+    return await Promise.allSettled(promises);
 });
 
 // Request for Computation Response
@@ -213,31 +208,37 @@ app.get("/reqComp", (req, res) => {
 // Validation of Computation
 app.get("/compVal", async (req, res) => {
   ready = {};
+  promises = [];
   for (let i = 0; i < ips.length; i++) {
-    var request = http.request(
-      {
-        host: ips[i],
-        port: 5000,
-        path: "/reqComp",
-        method: "GET",
-      },
-      function (response) {
-        var data = "";
-        response.setEncoding("utf8");
-        response.on("data", (chunk) => {
-          data += chunk;
+    promises.push(new Promise((resolve, reject) => {
+      var request = http.request(
+        {
+          host: ips[i],
+          port: 5000,
+          path: "/reqComp",
+          method: "GET",
+        },
+        function (response) {
+          var data = "";
+          response.setEncoding("utf8");
+          response.on("data", (chunk) => {
+            data += chunk;
+          });
+          response.on("end", () => {
+            res.end(data);
+            resolve(data);
+          });
+        }
+        );
+        request.on("error", function (err) {
+          console.log("error: Device " + ips[i] + " not found");
+          console.log("error Message: " + err);
+          reject("Not Found");
         });
-        response.on("end", () => {
-          res.end(data);
-        });
-      }
-    );
-    request.on("error", function (err) {
-      console.log("error: Device " + ips[i] + " not found");
-      console.log("error Message: " + err);
-    });
-    request.end();
-  }
+        request.end();
+      }))
+    }
+  return await Promise.allSettled(promises);
 });
 
 // Sending of Computation - Client recieving and sending.
