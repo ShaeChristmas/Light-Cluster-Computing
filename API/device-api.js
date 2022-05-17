@@ -28,7 +28,7 @@ function mutliplyMatrixAndDot(matrix, point) {
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      returnRow[i] += point[j] * matrix[size * i + j];
+      returnRow[i] += point[j] * matrix[size * j + i];
     }
   }
   console.log(returnRow);
@@ -114,14 +114,8 @@ async function multiplyMatrices(matrixA, matrixB) {
     );
   }
   await Promise.all(promises);
-  // This code section is required, but i was wrapping it to try and make the code non-sequential.
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      returnMatrix[i][j] = newMatrix[j][i];
-    }
-  }
-  console.log(returnMatrix);
-  return returnMatrix;
+  console.log(newMatrix);
+  return newMatrix;
 }
 
 app.use(function (req, res, next) {
