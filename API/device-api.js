@@ -31,6 +31,7 @@ function mutliplyMatrixAndDot(matrix, point) {
       returnRow[i] += point[j] * matrix[size * i + j];
     }
   }
+  console.log(returnRow);
   return returnRow;
 }
 
