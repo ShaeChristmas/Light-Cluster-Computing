@@ -20,9 +20,9 @@ function mutliplyMatrixAndDot(matrix, point) {
   // Found from https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
   //console.log("multiplyMatrixAndDot: " + matrix);
   // Give a simple variable name to each part of the matrix, a column and row number
+  size = Math.sqrt(matrix.length);
   console.log("Matrix: " + matrix[3 * size + 3]);
   console.log("Point: " + point);
-  size = Math.sqrt(matrix.length);
   var returnRow = Array(size).fill(0);
   console.log("size: " + size);
 
