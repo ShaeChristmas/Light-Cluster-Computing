@@ -118,6 +118,7 @@ async function multiplyMatrices(matrixA, matrixB) {
   return newMatrix;
 }
 
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -190,8 +191,8 @@ app.get("/infoReq", async (req, res) => {
       request.end();
     }));
     }
-
-    return await Promise.allSettled(promises);
+    values = await Promise.all(promises);
+    return values;
 });
 
 // Request for Computation Response
@@ -237,7 +238,8 @@ app.get("/compVal", async (req, res) => {
         request.end();
       }))
     }
-  return await Promise.allSettled(promises);
+  ready = await Promise.all(promises);
+  return ready;
 });
 
 // Sending of Computation - Client recieving and sending.
