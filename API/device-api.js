@@ -100,7 +100,7 @@ async function multiplyMatrices(matrixA, matrixB) {
   for (let i = 0; i < size; i++) {
     var point = new Array(size).fill(0);
     for (let j = 0; j < size; j++) {
-      point[j] = matrixB[i + size * j];
+      point[j] = matrixB[j + size * i];
     }
     // console.log("point: "+ point);
     // Async before the below function works, but its technically sequential.
@@ -264,6 +264,7 @@ app.get("/compVal", async function (req, res) {
 app.get("/getComp", async function (req, res) {
   try {
     console.log("/getComp: This runnig");
+    //console.log(req)
     var result = await multiplyMatrices(req.body.matrixA, req.body.matrixB);
     console.log("/getComp output: \n" + result);
     res.send(result); //req.body.matrixA
