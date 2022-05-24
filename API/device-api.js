@@ -107,9 +107,9 @@ async function multiplyMatrices(matrixA, matrixB) {
     promises.push(
       sendReq(ips[i % nodev], matrixA, point).then((data) => {
         newMatrix[i] = data.returnRow;
-        console.log(data.returnRow);
+        //console.log(data.returnRow);
         count++;
-        console.log(count);
+        //console.log(count);
       })
     );
   }
@@ -153,46 +153,55 @@ app.get("/info", (req, res) => {
   });
 });
 
+function reqInfo(ip) {
+  return new Promise((resolve, reject) => {
+    //console.log("Testing:" + ip);
+    var request = http.request(
+      {
+        host: ip,
+        port: 5000,
+        path: "/info",
+        method: "GET",
+        timeout: 500
+      },
+    function (response) {
+      var data = "";
+      response.setEncoding("utf8");
+      response.on("data", (chunk) => {
+        data += chunk;
+      });
+      response.on("end", () => {
+        //res.end(data);
+        resolve(data);
+        //console.log(data);
+      });
+    }
+    );
+    request.on("timeout", () => {
+      request.destroy();
+    });
+    request.on("error", function (err) {
+      console.log("error: Device " + ip + " not found");
+      console.log("error Message: " + err);
+      reject("Not found");
+    });
+    request.end();
+  });
+}
+
 // Get Device Information - not sure if will work with multiple devices.
 app.get("/infoReq", async (req, res) => {
+  values =[];
   promises = [];
   for (let i = 0; i < ips.length; i++) {
-    promises.push(new Promise((resolve, reject) => {
-      console.log("Testing:" + ips[i]);
-      var request = http.request(
-        {
-          host: ips[i],
-          port: 5000,
-          path: "/info",
-          method: "GET",
-          timeout: 500
-        },
-      function (response) {
-        var data = "";
-        response.setEncoding("utf8");
-        response.on("data", (chunk) => {
-          data += chunk;
-        });
-        response.on("end", () => {
-          res.end(data);
-          resolve(data);
-          //console.log(data);
-        });
-      }
-      );
-      request.on("timeout", () => {
-        request.destroy();
-      });
-      request.on("error", function (err) {
-        console.log("error: Device " + ips[i] + " not found");
-        console.log("error Message: " + err);
-        reject("Not found");
-      });
-      request.end();
+    promises.push(reqInfo(ips[i]).then((data)=> {
+      //console.log("Data: "+data);
+      values[i] = data;
     }));
-    }
-    values = await Promise.all(promises);
-    return values;
+  }
+  await Promise.all(promises);
+  //console.log("Values: "+values);
+  res.send(values);
 });
 
 // Request for Computation Response
@@ -201,45 +210,54 @@ app.get("/reqComp", (req, res) => {
   console.log([ip, !busy]);
 });
 
+// RequestComp
+function reqComp(ip) {
+  return new Promise((resolve, reject) => {
+  var request = http.request(
+    {
+      host: ip,
+      port: 5000,
+      path: "/reqComp",
+      method: "GET",
+      timeout: 500
+    },
+    function (response) {
+      var data = "";
+      response.setEncoding("utf8");
+      response.on("data", (chunk) => {
+        data += chunk;
+      });
+      response.on("end", () => {
+        //res.end(data);
+        resolve(data);
+      });
+    }
+    );
+    request.on("timeout", () => {
+      request.destroy();
+    });
+    request.on("error", function (err) {
+      console.log("error: Device " + ips[i] + " not found");
+      console.log("error Message: " + err);
+      reject("Not Found");
+    });
+    request.end();
+  });
+}
+
 // Validation of Computation
-app.get("/compVal", async (req, res) => {
-  ready = {};
+app.get("/compVal", async function (req, res) {
+  ready = [];
   promises = [];
   for (let i = 0; i < ips.length; i++) {
-    promises.push(new Promise((resolve, reject) => {
-      var request = http.request(
-        {
-          host: ips[i],
-          port: 5000,
-          path: "/reqComp",
-          method: "GET",
-          timeout: 500
-        },
-        function (response) {
-          var data = "";
-          response.setEncoding("utf8");
-          response.on("data", (chunk) => {
-            data += chunk;
-          });
-          response.on("end", () => {
-            res.end(data);
-            resolve(data);
-          });
-        }
-        );
-        request.on("timeout", () => {
-          request.destroy();
-        });
-        request.on("error", function (err) {
-          console.log("error: Device " + ips[i] + " not found");
-          console.log("error Message: " + err);
-          reject("Not Found");
-        });
-        request.end();
-      }))
-    }
-  ready = await Promise.all(promises);
-  return ready;
+    promises.push(reqComp(ips[i]).then((data) => {
+      //console.log("Data: "+ data);
+      ready[i] = data;
+    }));
+  }
+  await Promise.all(promises);
+  //console.log("Ready: "+ready);
+  res.send(ready);
 });
 
 // Sending of Computation - Client recieving and sending.
