@@ -18,7 +18,7 @@ API for testing the architecture of the end system. At this stage, three parts a
 - Device Information sending and recieving.
 - Device availability sending and recieving.
 - Matrix Multiplication sending and recieving requests.
-    Note: All devices running the API can act as a Leader or Follower Device. Clients request matricies to multiply using HTTP requests to the API. For implementation, see [Client.py](/Light-Cluster-Computing/Client%20Device/Client.py)
+    Note: All devices running the API can act as a Leader or Follower Device. Clients request matricies to multiply using HTTP requests to the API. For implementation, see [Client.py](/Client%20Device/Client.py)
 
 ## Basic Device Code
 Currently implements the device code for ZeroConf service advertisment and discovery. Note: Currently ServiceInfo is not advertised, but the service can be discovered.
