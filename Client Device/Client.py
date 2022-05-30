@@ -2,6 +2,7 @@
 import http.client
 import json
 
+start_ip = "192.168.1.3"
 ips = []
 ready = []
 matrixTest = [1]
@@ -36,7 +37,7 @@ def popIps(ip):
 
 def readyCheck():
     # Create a connection to the server
-    connection = http.client.HTTPConnection("localhost", 5000)
+    connection = http.client.HTTPConnection(start_ip, 5000)
     # Send a request to the server
     connection.request('GET', '/compVal')
     # Read the response from the server
@@ -61,7 +62,7 @@ def multiply(matrix1, matrix2):
     JSONbody = json.dumps(body).encode()
     #print(JSONbody)
     # Create a connection to the server
-    connection = http.client.HTTPConnection("localhost", 5000)
+    connection = http.client.HTTPConnection(start_ip, 5000)
     # Send a request to the server
     connection.request('GET', '/getComp',body=JSONbody,headers=headers)
     # Read the response from the server
@@ -77,7 +78,7 @@ def main():
     # Print ips before
     print("Before: "+str(ips))
     # Populate ips
-    popIps("localhost")
+    popIps(start_ip)
     # Print ips after
     print("After: "+str(ips))
     # Print ready before
@@ -89,6 +90,7 @@ def main():
     # Print result matrix before calculation
     print("Result Matrix: "+str(matrixResult))
     # Multiply MatrixA and MatrixID
+    print("Mutliplying: ", matrixC, "\n and ", matrixID)
     matrixResult = multiply(matrixC, matrixID)
     # Print result matrix after calculation
     print("Result Matrix: "+str(matrixResult))
@@ -97,6 +99,7 @@ def main():
     # Print result matrix before calculation
     print("Result Matrix: "+str(matrixResult))
     # Multiply MatrixA and MatrixID
+    print("Mutliplying: ", matrixC, "\n and ", matrixD)
     matrixResult = multiply(matrixC, matrixD)
     # Print result matrix after calculation
     print("Result Matrix: "+str(matrixResult))
