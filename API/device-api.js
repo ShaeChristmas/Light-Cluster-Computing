@@ -13,8 +13,8 @@ var ips = require("./ips.json");
 const port = 5000;
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.json({limit: '200mb'}));
-app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 function mutliplyMatrixAndDot(matrix, point) {
   // Found from https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
