@@ -52,6 +52,7 @@ def readyCheck():
             ready.append(valueToAdd[0])
     connection.close()
 
+# NOTE: MATRICIES MUST BE SQUARE!!!
 def multiply(matrix1, matrix2):
     body = {
         "matrixA": matrix1, 
