@@ -13,8 +13,8 @@ var ips = require("./ips.json");
 const port = 5000;
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.json({limit: '5000000mb'}));
-app.use(bodyParser.urlencoded({ limit: '5000000mb', extended: true }));
+app.use(bodyParser.json({parameterLimit: 1000000, limit: '50mb'}));
+app.use(bodyParser.urlencoded({ parameterLimit: 1000000, limit: '50mb', extended: true }));
 
 // Not sure this does anything.
 //app.use(express.json({limit: '5000000mb'}));
