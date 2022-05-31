@@ -1,14 +1,16 @@
 # Python Web Client
-import http.client
-import json
+import http.client, json, random, time, sys
 
 start_ip = "192.168.1.3"
 ips = []
 ready = []
 matrixTest = [1]
 matrixC = [1,2,3,4,5,6,7,8,9]
+matrixCP = [[1,2,3],[4,5,6],[7,8,9]]
 matrixID = [1,0,0,0,1,0,0,0,1]
+matrixIDP = [[1,0,0],[0,1,0],[0,0,1]]
 matrixD = [2,4,6,8,10,12,14,16,18]
+matrixDP = [[2,4,6],[8,10,12],[14,16,18]]
 matrixResult = []
 
 headers = {
@@ -17,6 +19,38 @@ headers = {
     "Content-Type": "application/json"
 }
 
+def convMat(matrix):
+    matrixResult = []
+    size = len(matrix)
+    for i in range(size):
+        for j in range(size):
+            #print("i: "+str(i)+" j: "+str(j))
+            matrixResult.append(matrix[i][j])
+    print("Matrix Converted")
+    return matrixResult
+
+def createMatrix(size, val):
+    matrix = []
+    if val == 0:
+        for i in range(size):
+            matrix.append([])
+            for j in range(size):
+                matrix[i].append(val)
+    else:
+        for i in range(size):
+            matrix.append([])
+            for j in range(size):
+                matrix[i].append(random.randint(1,10))
+    return matrix
+
+def multiplyLocal(matrix1, matrix2, matrixResult):
+    m1Size = len(matrix1)
+    for i in range(m1Size):
+        for j in range(m1Size):
+            for k in range(m1Size):
+                #print("I: "+str(i)+" J: "+str(j)+" K: "+str(k))
+                matrixResult[i][j] += matrix1[i][k] * matrix2[k][j]
+    return matrixResult
 
 def popIps(ip):
     # Copilot Example of using http.client
@@ -54,15 +88,16 @@ def readyCheck():
     connection.close()
 
 # NOTE: MATRICIES MUST BE SQUARE!!!
-def multiply(matrix1, matrix2):
+def multiply(matrix1, matrix2, ip=start_ip):
     body = {
         "matrixA": matrix1, 
         "matrixB":matrix2
     }
     JSONbody = json.dumps(body).encode()
+    #print(sys.getsizeof(JSONbody))
     #print(JSONbody)
     # Create a connection to the server
-    connection = http.client.HTTPConnection(start_ip, 5000)
+    connection = http.client.HTTPConnection(ip, 5000, timeout=5000)
     # Send a request to the server
     connection.request('GET', '/getComp',body=JSONbody,headers=headers)
     # Read the response from the server
@@ -73,7 +108,7 @@ def multiply(matrix1, matrix2):
     #print(data)
     return data
 
-def main():
+def testWork():
     matrixResult = []
     # Print ips before
     print("Before: "+str(ips))
@@ -103,6 +138,68 @@ def main():
     matrixResult = multiply(matrixC, matrixD)
     # Print result matrix after calculation
     print("Result Matrix: "+str(matrixResult))
+
+def localTime(matrix1, matrix2):
+    localResult = createMatrix(len(matrix1),0)
+    #start timer.
+    start = time.time()
+    # multiply
+    multiplyLocal(matrix1, matrix2, localResult)
+    #stop timer.
+    stop = time.time()
+    print("Local Duration: ", stop-start)
+    return localResult
+
+def offTime(matrix1, matrix2):
+    offResult = createMatrix(len(matrix1),0)
+    matrix1Temp = convMat(matrix2)
+    matrix2Temp = convMat(matrix1)
+    #start timer.
+    start = time.time()
+    # multiply
+    offResult = multiply(matrix1Temp, matrix2Temp)
+    #stop timer.
+    stop = time.time()
+    print("Off Duration: ", stop-start)
+    return offResult
+
+def singleOffTime(matrix1, matrix2):
+    offResult = createMatrix(len(matrix1),0)
+    matrix1Temp = convMat(matrix2)
+    matrix2Temp = convMat(matrix1)
+    #start timer.
+    start = time.time()
+    # multiply
+    offResult = multiply(matrix1Temp, matrix2Temp, "localhost")
+    #stop timer.
+    stop = time.time()
+    print("Off 1 Duration: ", stop-start)
+    return offResult
+
+def main():
+    #testWork()
+    # Define Size
+    size = 50
+    print("Size: "+str(size))
+    # Create matrix1
+    matrixA = createMatrix(size,1)
+    #print("MatrixA: "+str(matrixA))
+    # Create matrix2
+    matrixB = createMatrix(size,1)
+    #print("MatrixB: "+str(matrixB))
+    # Measure Time to multiply locally
+    resultMatrixLocal = localTime(matrixA, matrixB)
+    # Perform offloading with 1 device (Remember to start localhost API first)
+    resultMatrixOff1 = singleOffTime(matrixA, matrixB)
+    # Perform offloading with proposed Architecture
+    resultMatrixOff3 = offTime(matrixA, matrixB)
+    #print(matrixA)
+    #print(matrixB)
+    #print(resultMatrixLocal)
+    #print(resultMatrixOff)
+    if(resultMatrixLocal == resultMatrixOff3 and resultMatrixLocal == resultMatrixOff1):
+        print("All results are the same")
+
 
 if __name__ == "__main__":
     main()
