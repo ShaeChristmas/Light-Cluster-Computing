@@ -17,7 +17,7 @@ const port = 5000;
 //app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json({limit: '5000mb'}));
-app.use(express.urlencoded({limit: '5000mb'}));
+app.use(express.urlencoded({limit: '5000mb', extended: true}));
 
 function mutliplyMatrixAndDot(matrix, point) {
   // Found from https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
