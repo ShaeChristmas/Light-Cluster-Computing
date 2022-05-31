@@ -16,18 +16,18 @@ const port = 5000;
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.json({limit: '500mb'}));
-app.use(express.urlencoded({limit: '500mb'}));
+app.use(express.json({limit: '5000mb'}));
+app.use(express.urlencoded({limit: '5000mb'}));
 
 function mutliplyMatrixAndDot(matrix, point) {
   // Found from https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
   //console.log("multiplyMatrixAndDot: " + matrix);
   // Give a simple variable name to each part of the matrix, a column and row number
   size = Math.sqrt(matrix.length);
-  console.log("Matrix: " + matrix[3 * size + 3]);
-  console.log("Point: " + point);
+  //console.log("Matrix: " + matrix[3 * size + 3]);
+  //console.log("Point: " + point);
   var returnRow = Array(size).fill(0);
-  console.log("size: " + size);
+  //console.log("size: " + size);
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
@@ -71,10 +71,10 @@ function sendReq(ip, matrix, point) {
         } catch {
           reject(new Error(err));
         }
-        console.log("data: " + eval(data)[1]);
         resolve({
           returnRow: eval(data)[1],
         });
+        console.log("data: " + eval(data)[1]);
       });
     });
     request.on("error", reject);
@@ -269,8 +269,8 @@ app.get("/getComp", async function (req, res) {
     console.log("/getComp: This runnig");
     //console.log(req)
     var result = await multiplyMatrices(req.body.matrixA, req.body.matrixB);
-    console.log("/getComp output: \n" + result);
     res.send(result); //req.body.matrixA
+    console.log("/getComp output: \n" + result);
   } catch (exception) {
     console.log("oops");
     console.log(exception);
