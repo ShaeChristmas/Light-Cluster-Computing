@@ -1,33 +1,31 @@
-import zeroconf as z
 import socket
-
-def initZero(type, name):
-    deviceType = '_'+type
-    ip = socket.gethostbyname(socket.gethostname())
-    properties = {'deviceName': name, 'ip': ip}
-    port = 3001
-
-    info = z.ServiceInfo(
-        deviceType + '._tcp.local.', 
-        name+'.'+deviceType+"._tcp.local.",
-        port=port, 
-        properties=properties, 
-        server=name+ ".local."
-    )
-
-    print(info)
-    zeroconf = z.Zeroconf()
-    zeroconf.register_service(info,cooperating_responders=True)
-    print(info.name+"\n"+info.type)
-    print("service started")
-    try:
-        input("Press enter to exit...\n\n") # Device is only discoverable while code is actively running. Not sure if ServiceInfo cannot be retrieved because its not running as a express API or not lmao.
-    finally:
-        print("quitting")
-        zeroconf.close()
-
-def main():
-    initZero("iot-device", "test-device")
+from time import sleep
+from zeroconf import IPVersion, ServiceInfo, Zeroconf
 
 if __name__ == '__main__':
-    main()
+    name = "test-device"
+    ip = socket.gethostbyname(socket.gethostname())
+    desc = {'deviceName': name, 'ip': ip}
+    deviceType = "_iot-device"
+    port = 3001
+    info = ServiceInfo(
+        deviceType + '._tcp.local.', 
+        name+'.'+deviceType+"._tcp.local.",
+        port=port,
+        addresses=[ip],
+        properties=desc,
+        server=name+".local.",
+    )
+
+    zeroconf = Zeroconf()
+    print("Registration of a service, press Ctrl-C to exit...")
+    zeroconf.register_service(info)
+    try:
+        while True:
+            sleep(0.1)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        print("Unregistering...")
+        zeroconf.unregister_service(info)
+        zeroconf.close()

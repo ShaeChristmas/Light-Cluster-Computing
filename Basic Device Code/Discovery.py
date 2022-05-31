@@ -1,18 +1,22 @@
-from zeroconf import ServiceBrowser, Zeroconf, ServiceInfo
+from zeroconf import ServiceBrowser, ServiceListener, Zeroconf
 
-class MyListener:
 
-    def remove_service(self, zeroconf, type, name):
-        print("Service %s removed" % (name))
+class MyListener(ServiceListener):
 
-    def add_service(self, zeroconf, type, name):
-        print(name+"\n"+type)
-        info = zeroconf.get_service_info(type, name) # Couldn't get this working, kept returning None. I think i need to use websockets for hosting the device.
-        print("Service %s added, service info: %s" % (name, info))
+    def update_service(self, zc: Zeroconf, type_: str, name: str) -> None:
+        print(f"Service {name} updated")
+
+    def remove_service(self, zc: Zeroconf, type_: str, name: str) -> None:
+        print(f"Service {name} removed")
+
+    def add_service(self, zc: Zeroconf, type_: str, name: str) -> None:
+        info = zc.get_service_info(type_, name)
+        print(f"Service {name} added, service info: {info}")
 
 
 zeroconf = Zeroconf()
 listener = MyListener()
+# My devices are "_iot-device._tcp.local."
 browser = ServiceBrowser(zeroconf, "_iot-device._tcp.local.", listener)
 try:
     input("Press enter to exit...\n\n")
