@@ -335,7 +335,7 @@ app.get("/sendComp", (req, res) => {
   //console.log(req);
   var matrix = req.body.matrix;
   var points = req.body.point;
-  var row = await multiplyMatricesLocal(matrix, points);
+  var row = multiplyMatricesLocal(matrix, points);
   console.log("Row outputs: ",row);
   res.send([info.ip, row]);
   busy = false;
