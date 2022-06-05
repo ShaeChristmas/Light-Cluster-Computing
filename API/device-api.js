@@ -13,14 +13,16 @@ var ips = require("./ips.json");
 const port = 5000;
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.json({parameterLimit: 1000000, limit: '50mb'}));
-app.use(bodyParser.urlencoded({ parameterLimit: 1000000, limit: '50mb', extended: true }));
+app.use(bodyParser.json({ parameterLimit: 1000000, limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    parameterLimit: 1000000,
+    limit: "50mb",
+    extended: true,
+  })
+);
 
-// Not sure this does anything.
-//app.use(express.json({limit: '5000000mb'}));
-//app.use(express.urlencoded({limit: '5000000mb', extended: true}));
-
-function mutliplyMatrixAndDot(matrix, point) {
+function multiplyMatrixAndDot(matrix, point) {
   // Found from https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web
   //console.log("multiplyMatrixAndDot: " + matrix);
   // Give a simple variable name to each part of the matrix, a column and row number
@@ -29,14 +31,33 @@ function mutliplyMatrixAndDot(matrix, point) {
   //console.log("Point: " + point);
   var returnRow = Array(size).fill(0);
   //console.log("size: " + size);
-
+  points = point.split(",");
+  console.log(returnRow);
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      returnRow[i] += point[j] * matrix[size * j + i];
+      console.log(points[j]);
+      returnRow[i] += points[j] * matrix[size * j + i];
     }
+    console.log("Return value: ", returnRow[i]);
   }
   console.log(returnRow);
   return returnRow;
+}
+
+async function multiplyMatricesLocal(matrixA, points) {
+  // iterate rows of matrixA
+  size = Math.sqrt(matrixA.length);
+  console.log("Matrix 1: " + matrixA);
+  //console.log("Matrix 2: " + matrixB);
+  matrixResult = [];
+  console.log("Length: ", points.length);
+  for (let i = 0; i < points.length; i++) {
+    console.log("MatrixA: " + matrixA);
+    console.log("Point: ", points[i]);
+    matrixResult[i] = multiplyMatrixAndDot(matrixA, points[i]);
+  }
+  console.log(matrixResult);
+  return matrixResult;
 }
 
 function sendReq(ip, matrix, point) {
@@ -98,22 +119,50 @@ async function multiplyMatrices(matrixA, matrixB) {
     .map(() => Array(size).fill(0));
   //console.log(newMatrix);
   var nodev = ips.length;
-  var count = 0;
 
   var promises = [];
+  var points = [];
   for (let i = 0; i < size; i++) {
     var point = new Array(size).fill(0);
     for (let j = 0; j < size; j++) {
       point[j] = matrixB[j + size * i];
     }
+    points.push(point);
     // console.log("point: "+ point);
     // Async before the below function works, but its technically sequential.
+  }
+  newMatrix = [];
+  // Decide new rows to send to multiplyMatricesLocal.
+  num = points.length;
+  amount = Math.ceil(num / nodev);
+  console.log("Amount: ", amount);
+  var curcount = 0;
+  var rowCount = 0;
+  for (let i = 0; i < nodev - 1; i++) {
+    pointsToUse = points.slice(curcount, curcount + amount);
+    curcount += amount;
+
+    console.log("Points: ", pointsToUse);
+    // Set each as promise
     promises.push(
-      sendReq(ips[i % nodev], matrixA, point).then((data) => {
-        newMatrix[i] = data.returnRow;
-        //console.log(data.returnRow);
-        count++;
-        //console.log(count);
+      sendReq(ips[i], matrixA, pointsToUse).then((data) => {
+        for (let i = 0; i < data.returnRow.length; i++) {
+          newMatrix[rowCount] = data.returnRow[i];
+          rowCount++;
+        }
+      })
+    );
+  }
+  pointsToUse = points.slice(curcount, points.length);
+  console.log("Points: ", pointsToUse);
+  // Set each as promise
+  if (pointsToUse.length > 0) {
+    promises.push(
+      sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
+        for (let i = 0; i < data.returnRow.length; i++) {
+          newMatrix[rowCount] = data.returnRow[i];
+          rowCount++;
+        }
       })
     );
   }
@@ -121,7 +170,6 @@ async function multiplyMatrices(matrixA, matrixB) {
   console.log(newMatrix);
   return newMatrix;
 }
-
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -134,7 +182,6 @@ app.use(function (req, res, next) {
 
 // Required Info
 var info = require("./local.json");
-const { count } = require("console");
 let name = info.name;
 let ip = info.ip;
 let mac = info.mac;
@@ -166,20 +213,20 @@ function reqInfo(ip) {
         port: 5000,
         path: "/info",
         method: "GET",
-        timeout: 500
+        timeout: 500,
       },
-    function (response) {
-      var data = "";
-      response.setEncoding("utf8");
-      response.on("data", (chunk) => {
-        data += chunk;
-      });
-      response.on("end", () => {
-        //res.end(data);
-        resolve(data);
-        //console.log(data);
-      });
-    }
+      function (response) {
+        var data = "";
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          data += chunk;
+        });
+        response.on("end", () => {
+          //res.end(data);
+          resolve(data);
+          //console.log(data);
+        });
+      }
     );
     request.on("timeout", () => {
       request.destroy();
@@ -195,13 +242,15 @@ function reqInfo(ip) {
 
 // Get Device Information - not sure if will work with multiple devices.
 app.get("/infoReq", async (req, res) => {
-  values =[];
+  values = [];
   promises = [];
   for (let i = 0; i < ips.length; i++) {
-    promises.push(reqInfo(ips[i]).then((data)=> {
-      //console.log("Data: "+data);
-      values[i] = data;
-    }));
+    promises.push(
+      reqInfo(ips[i]).then((data) => {
+        //console.log("Data: "+data);
+        values[i] = data;
+      })
+    );
   }
   await Promise.all(promises);
   //console.log("Values: "+values);
@@ -217,25 +266,25 @@ app.get("/reqComp", (req, res) => {
 // RequestComp
 function reqComp(ip) {
   return new Promise((resolve, reject) => {
-  var request = http.request(
-    {
-      host: ip,
-      port: 5000,
-      path: "/reqComp",
-      method: "GET",
-      timeout: 500
-    },
-    function (response) {
-      var data = "";
-      response.setEncoding("utf8");
-      response.on("data", (chunk) => {
-        data += chunk;
-      });
-      response.on("end", () => {
-        //res.end(data);
-        resolve(data);
-      });
-    }
+    var request = http.request(
+      {
+        host: ip,
+        port: 5000,
+        path: "/reqComp",
+        method: "GET",
+        timeout: 500,
+      },
+      function (response) {
+        var data = "";
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          data += chunk;
+        });
+        response.on("end", () => {
+          //res.end(data);
+          resolve(data);
+        });
+      }
     );
     request.on("timeout", () => {
       request.destroy();
@@ -254,10 +303,12 @@ app.get("/compVal", async function (req, res) {
   ready = [];
   promises = [];
   for (let i = 0; i < ips.length; i++) {
-    promises.push(reqComp(ips[i]).then((data) => {
-      //console.log("Data: "+ data);
-      ready[i] = data;
-    }));
+    promises.push(
+      reqComp(ips[i]).then((data) => {
+        //console.log("Data: "+ data);
+        ready[i] = data;
+      })
+    );
   }
   await Promise.all(promises);
   //console.log("Ready: "+ready);
@@ -283,8 +334,8 @@ app.get("/sendComp", (req, res) => {
   busy = true;
   //console.log(req);
   var matrix = req.body.matrix;
-  var point = req.body.point;
-  var row = mutliplyMatrixAndDot(matrix, point);
+  var points = req.body.point;
+  var row = multiplyMatricesLocal(matrix, points);
   res.send([info.ip, row]);
   busy = false;
 });
