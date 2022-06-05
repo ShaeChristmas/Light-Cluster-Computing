@@ -1,5 +1,6 @@
 # Python Web Client
 import http.client, json, random, time, sys
+from unittest import result
 
 start_ip = "192.168.1.3"
 ips = []
@@ -52,7 +53,7 @@ def multiplyLocal(matrix1, matrix2, matrixResult):
                 matrixResult[i][j] += matrix1[i][k] * matrix2[k][j]
     return matrixResult
 
-def popIps(ip):
+def popIps(ip, print=True):
     # Copilot Example of using http.client
     # Create a connection to the server
     connection = http.client.HTTPConnection(ip, 5000)
@@ -66,7 +67,8 @@ def popIps(ip):
     for val in data:
         valueToAdd = json.loads(val)["ip"]
         ips.append(valueToAdd)
-        print(valueToAdd)
+        if (print): 
+            print(valueToAdd)
     connection.close()
 
 def readyCheck():
@@ -148,7 +150,7 @@ def localTime(matrix1, matrix2):
     #stop timer.
     stop = time.time()
     print("Local Duration: ", stop-start)
-    return localResult
+    return [localResult, stop-start]
 
 def offTime(matrix1, matrix2):
     offResult = createMatrix(len(matrix1),0)
@@ -157,11 +159,11 @@ def offTime(matrix1, matrix2):
     #start timer.
     start = time.time()
     # multiply
-    offResult = multiply(matrix1Temp, matrix2Temp)
+    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.14")
     #stop timer.
     stop = time.time()
     print("Off Duration: ", stop-start)
-    return offResult
+    return [offResult,stop-start]
 
 def singleOffTime(matrix1, matrix2):
     offResult = createMatrix(len(matrix1),0)
@@ -170,17 +172,15 @@ def singleOffTime(matrix1, matrix2):
     #start timer.
     start = time.time()
     # multiply
-    offResult = multiply(matrix1Temp, matrix2Temp, "localhost")
+    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.15")
     #stop timer.
     stop = time.time()
     print("Off 1 Duration: ", stop-start)
-    return offResult
+    return [offResult,stop-start]
 
-def main():
-    #testWork()
-    # Define Size
-    size = 50
+def runTest(size):
     print("Size: "+str(size))
+    QoS = False
     # Create matrix1
     matrixA = createMatrix(size,1)
     #print("MatrixA: "+str(matrixA))
@@ -197,9 +197,29 @@ def main():
     #print(matrixB)
     #print(resultMatrixLocal)
     #print(resultMatrixOff)
-    if(resultMatrixLocal == resultMatrixOff3 and resultMatrixLocal == resultMatrixOff1):
+    if(resultMatrixLocal[0] == resultMatrixOff3[0] and resultMatrixLocal[0] == resultMatrixOff1[0]):
+        QoS = True
         print("All results are the same")
+    file =open("results.txt", "a")
+    file.write(str(size)+","+str(resultMatrixLocal[1])+","+str(resultMatrixOff1[1])+","+str(resultMatrixOff3[1])+","+str(QoS)+"\n")
+    file.close()
 
+def main():
+    # Create File:
+    file = open('results.txt', 'w')
+    file.write("Test Matrix size (num of rows), Time Locally, Time offloaded, Time offloaded with Distribution\n");
+    file.close()
+    # Test with different sizes
+    runTest(10)
+    runTest(20)
+    runTest(30)
+    runTest(40)
+    runTest(50)
+    runTest(60)
+    runTest(70)
+    runTest(80)
+    runTest(90)
+    runTest(100)
 
 if __name__ == "__main__":
     main()
