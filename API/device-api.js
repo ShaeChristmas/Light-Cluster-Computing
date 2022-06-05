@@ -93,7 +93,6 @@ function sendReq(ip, matrix, point) {
         } catch {
           reject(new Error(err));
         }
-        console.log(eval(data));
         resolve({
           returnRow: eval(data)[1],
         });
@@ -337,6 +336,7 @@ app.get("/sendComp", (req, res) => {
   var matrix = req.body.matrix;
   var points = req.body.point;
   var row = multiplyMatricesLocal(matrix, points);
+  console.log("Row outputs: ",row);
   res.send([info.ip, row]);
   busy = false;
 });
