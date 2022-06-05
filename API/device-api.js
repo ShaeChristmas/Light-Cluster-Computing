@@ -147,8 +147,8 @@ async function multiplyMatrices(matrixA, matrixB) {
     // Set each as promise
     promises.push(
       sendReq(ips[i], matrixA, pointsToUse).then((data) => {
-        for (let i = 0; i < data.returnRow.length; i++) {
-          newMatrix[rowCount] = data.returnRow[i];
+        for (let j = 0; j < data.returnRow.length; j++) {
+          newMatrix[i*amount +rowCount] = data.returnRow[j];
           rowCount++;
         }
       })
@@ -162,7 +162,7 @@ async function multiplyMatrices(matrixA, matrixB) {
       sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
         console.log("SendReq Data: ",data);
         for (let i = 0; i < data.returnRow.length; i++) {
-          newMatrix[rowCount] = data.returnRow[i];
+          newMatrix[(nodev-1)*amount+rowCount] = data.returnRow[i];
           rowCount++;
         }
       })
