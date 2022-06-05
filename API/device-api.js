@@ -90,6 +90,7 @@ function sendReq(ip, matrix, point) {
       response.on("end", () => {
         try {
           valueToReturn = JSON.parse(data);
+          //console.log("Value to return: " + valueToReturn);
         } catch {
           reject(new Error(err));
         }
@@ -159,6 +160,7 @@ async function multiplyMatrices(matrixA, matrixB) {
   if (pointsToUse.length > 0) {
     promises.push(
       sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
+        console.log("SendReq Data: ",data);
         for (let i = 0; i < data.returnRow.length; i++) {
           newMatrix[rowCount] = data.returnRow[i];
           rowCount++;
@@ -335,10 +337,13 @@ app.get("/sendComp", (req, res) => {
   //console.log(req);
   var matrix = req.body.matrix;
   var points = req.body.point;
-  var row = multiplyMatricesLocal(matrix, points);
-  console.log("Row outputs: ",row);
-  res.send([info.ip, row]);
-  busy = false;
+  var rows = [];
+  multiplyMatricesLocal(matrix, points).then((data)=> {
+    rows = data;
+    console.log("Row outputs: ",rows);
+    res.send([info.ip, rows]);
+    busy = false;
+  });
 });
 
 // Listen
