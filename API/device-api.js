@@ -138,7 +138,6 @@ async function multiplyMatrices(matrixA, matrixB) {
   amount = Math.ceil(num / nodev);
   console.log("Amount: ", amount);
   var curcount = 0;
-  var rowCount = 0;
   for (let i = 0; i < nodev - 1; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
@@ -148,8 +147,7 @@ async function multiplyMatrices(matrixA, matrixB) {
     promises.push(
       sendReq(ips[i], matrixA, pointsToUse).then((data) => {
         for (let j = 0; j < data.returnRow.length; j++) {
-          newMatrix[i*amount +rowCount] = data.returnRow[j];
-          rowCount++;
+          newMatrix[i*amount +j] = data.returnRow[j];
         }
       })
     );
@@ -162,8 +160,7 @@ async function multiplyMatrices(matrixA, matrixB) {
       sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
         console.log("SendReq Data: ",data);
         for (let i = 0; i < data.returnRow.length; i++) {
-          newMatrix[(nodev-1)*amount+rowCount] = data.returnRow[i];
-          rowCount++;
+          newMatrix[(nodev-1)*amount+i] = data.returnRow[i];
         }
       })
     );
