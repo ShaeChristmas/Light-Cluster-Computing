@@ -167,7 +167,7 @@ async function multiplyMatrices(matrixA, matrixB) {
     );
   }
   await Promise.all(promises);
-  console.log(newMatrix);
+  console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
 
