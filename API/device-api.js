@@ -166,7 +166,7 @@ async function multiplyMatrices(matrixA, matrixB) {
     );
   }
   await Promise.all(promises);
-  console.log("Returning Matrix: ",newMatrix);
+  //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
 
@@ -317,11 +317,11 @@ app.get("/compVal", async function (req, res) {
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
   try {
-    console.log("/getComp: This runnig");
+    //("/getComp: This runnig");
     //console.log(req)
     var result = await multiplyMatrices(req.body.matrixA, req.body.matrixB);
     res.send(result); //req.body.matrixA
-    console.log("/getComp output: \n" + result);
+    //console.log("/getComp output: \n" + result);
   } catch (exception) {
     console.log("oops");
     console.log(exception);
@@ -337,7 +337,7 @@ app.get("/sendComp", (req, res) => {
   var rows = [];
   multiplyMatricesLocal(matrix, points).then((data)=> {
     rows = data;
-    console.log("Row outputs: ",rows);
+    //console.log("Row outputs: ",rows);
     res.send([info.ip, rows]);
     busy = false;
   });
