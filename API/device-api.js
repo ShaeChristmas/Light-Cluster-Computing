@@ -38,7 +38,7 @@ function multiplyMatrixAndDot(matrix, point) {
       console.log(points[j]);
       returnRow[i] += points[j] * matrix[size * j + i];
     }
-    console.log("Return value: ", returnRow[i]);
+    //console.log("Return value: ", returnRow[i]);
   }
   console.log(returnRow);
   return returnRow;
@@ -93,6 +93,7 @@ function sendReq(ip, matrix, point) {
         } catch {
           reject(new Error(err));
         }
+        console.log(data);
         resolve({
           returnRow: eval(data)[1],
         });
