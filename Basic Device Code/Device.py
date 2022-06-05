@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     zeroconf = Zeroconf()
     print("Registration of a service, press Ctrl-C to exit...")
-    zeroconf.register_service(info)
+    zeroconf.register_service(info, cooperating_responders=True)
     try:
         while True:
             sleep(0.1)

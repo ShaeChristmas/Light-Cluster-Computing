@@ -1,4 +1,5 @@
 from zeroconf import ServiceBrowser, ServiceListener, Zeroconf
+import json
 
 
 class MyListener(ServiceListener):
@@ -18,6 +19,9 @@ zeroconf = Zeroconf()
 listener = MyListener()
 # My devices are "_iot-device._tcp.local."
 browser = ServiceBrowser(zeroconf, "_iot-device._tcp.local.", listener)
+info = zeroconf.get_service_info("_iot-device._tcp.local.", "test-device._iot-device._tcp.local.")
+print("Service Info: "+str((info.addresses)))
+
 try:
     input("Press enter to exit...\n\n")
 finally:
