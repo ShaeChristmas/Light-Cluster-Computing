@@ -206,20 +206,30 @@ def runTest(size):
 
 def main():
     # Create File:
-    file = open('results.txt', 'w')
-    file.write("Test Matrix size (num of rows), Time Locally, Time offloaded, Time offloaded with Distribution\n");
-    file.close()
+    #file = open('results.txt', 'w')
+    #file.write("Test Matrix size (num of rows), Time Locally, Time offloaded, Time offloaded with Distribution\n");
+    #file.close()
     # Test with different sizes
-    runTest(10)
-    runTest(20)
-    runTest(30)
-    runTest(40)
-    runTest(50)
-    runTest(60)
-    runTest(70)
-    runTest(80)
-    runTest(90)
-    runTest(100)
+    #runTest(10)
+    #runTest(20)
+    #runTest(30)
+    #runTest(40)
+    #runTest(50)
+    #runTest(60)
+    #runTest(70)
+    #runTest(80)
+    #runTest(90)
+    #runTest(100)
+    matrix1 = createMatrix(100,1)
+    matrix2 = createMatrix(100,1)
+    offResult = createMatrix(len(matrix1),0)
+    matrix1Temp = convMat(matrix2)
+    matrix2Temp = convMat(matrix1)
+    # multiply
+    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.15")
+    print(offResult)
+
+
 
 if __name__ == "__main__":
     main()
