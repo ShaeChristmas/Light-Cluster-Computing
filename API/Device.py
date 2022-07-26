@@ -4,7 +4,7 @@ from zeroconf import IPVersion, ServiceInfo, Zeroconf
 
 if __name__ == '__main__':
     name = "test-device"
-    ip = socket.gethostbyname(socket.gethostname())
+    ip = socket.gethostbyname(socket.gethostname()+'.local')
     desc = {'deviceName': name, 'ip': ip}
     deviceType = "_iot-device"
     port = 3001
