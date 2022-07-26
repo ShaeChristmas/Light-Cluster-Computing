@@ -7,6 +7,8 @@ class MyListener(ServiceListener):
 
     def update_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         print(f"Service {name} updated")
+        info = zc.get_service_info(type_, name)
+        print(info)
 
     def remove_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         print(f"Service {name} removed")

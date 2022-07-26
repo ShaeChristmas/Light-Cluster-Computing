@@ -5,7 +5,7 @@ def getName():
     return 'LightDevice' + mac[-6:]
 
 def getIp():
-    return socket.gethostbyname(socket.gethostname())
+    return socket.gethostbyname(socket.gethostname()+".local")
 
 def getMac():
     return ':'.join(re.findall('..', '%012x' % uuid.getnode()))

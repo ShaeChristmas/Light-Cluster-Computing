@@ -1,9 +1,11 @@
-import socket
+import socket, json
 from time import sleep
 from zeroconf import IPVersion, ServiceInfo, Zeroconf
 
 if __name__ == '__main__':
-    name = "test-device"
+    inf = open("local.json","r")
+    dev = json.load(inf)
+    name = dev["name"]
     ip = socket.gethostbyname(socket.gethostname()+'.local')
     desc = {'deviceName': name, 'ip': ip}
     deviceType = "_iot-device"
