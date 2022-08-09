@@ -222,6 +222,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
 }
 
 async function PiLocal(min, max) {
+  console.log("min: ",min," max: ", max);
   op = 1;
   result = 0;
   for (let n = min+1; n <= max; n += 2) {
