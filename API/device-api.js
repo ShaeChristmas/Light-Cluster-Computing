@@ -137,14 +137,14 @@ function sendReqPi(ip, min, max) {
       response.on("end", () => {
         try {
           valueToReturn = JSON.parse(data);
-          console.log("Value to return: " + valueToReturn);
+          //console.log("Value to return: " + valueToReturn);
         } catch {
           reject(new Error(err));
         }
         resolve({
           value: eval(data)[1],
         });
-        console.log("data: " + eval(data)[1]);
+        //console.log("data: " + eval(data)[1]);
       });
     });
     request.on("error", reject);
@@ -222,18 +222,18 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
 }
 
 async function PiLocal(min, max) {
-  console.log("min: ",typeof min," max: ",typeof max);
+  //console.log("min: ",typeof min," max: ",typeof max);
   result = 0;
   for (let n = parseInt(min)+1; n <= parseInt(max); n += 4) {
     result += 4 / (n * (n + 1) * (n + 2));
     result -= 4 / ((n+2) * (n + 3) * (n + 4));
   }
-  console.log("result: ", result);
+  //console.log("result: ", result);
   return result;
 }
 
 async function calcPi(Accuracy, number = 0) {
-  console.log("Running Pi Calculation with Accuracy: ", Accuracy, ", Number: ", number);
+  //console.log("Running Pi Calculation with Accuracy: ", Accuracy, ", Number: ", number);
   reps = Accuracy; // Hangs at 1000000000
   result = 3;
   if (number == 0) {
@@ -250,14 +250,14 @@ async function calcPi(Accuracy, number = 0) {
       result += 4 / (n * (n + 1) * (n + 2) * op);
       op *= -1;
     }
-    console.log("Result: ", result);
+    //console.log("Result: ", result);
     return { result: result.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
   } else {
     perdev = reps / nodev;
     n = 2;
     resultToSend = 0;
     for (let i = 0; i < nodev; i++) {
-      console.log("sending to node: ", ips[i]);
+      //console.log("sending to node: ", ips[i]);
       promises.push(sendReqPi(ips[i],i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
           resultToSend += data.value;
         }));
@@ -283,7 +283,6 @@ let name = info.name;
 let ip = info.ip;
 let mac = info.mac;
 let computation = info.comp;
-// Required Functions
 
 // Ask for Device Info
 app.get("/info", (req, res) => {
@@ -415,7 +414,7 @@ app.get("/compVal", async function (req, res) {
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
   try {
-    console.log("/getComp: This runnig");
+    //console.log("/getComp: This runnig");
     //console.log(req)
     if (req.body.matrixA != null) {
       var result = await multiplyMatrices(
@@ -424,7 +423,7 @@ app.get("/getComp", async function (req, res) {
         req.body.number
       );
     } else if (req.body.accuracy != null) {
-      console.log("Identified as Pi Calculation");
+      //console.log("Identified as Pi Calculation");
       var result = await calcPi(req.body.accuracy, req.body.number);
     } else {
       var result = { error: "No calculation found" };
@@ -452,14 +451,14 @@ app.get("/sendComp", (req, res) => {
       busy = false;
     });
   } else if (req.body.min != null) {
-    console.log("Identified as Pi Calculation in /sendComp");
+    //console.log("Identified as Pi Calculation in /sendComp");
     busy = true;
     var min = req.body.min;
     var max = req.body.max;
     //console.log(req);
     PiLocal(min, max).then((data) => {
       value = data;
-      console.log("value output: ", value);
+      //console.log("value output: ", value);
       res.send([info.ip, value]);
       busy = false;
     });
