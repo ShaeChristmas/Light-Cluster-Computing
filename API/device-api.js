@@ -258,12 +258,12 @@ async function calcPi(Accuracy, number = 0) {
     for (let i = 0; i < nodev; i++) {
       console.log("sending to node: ", ips[i]);
       promises.push(sendReqPi(ips[i],i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
-          result += data.value;
+          resultToSend += data.value;
         }));
     }
     await Promise.all(promises);
     result +=3;
-    return { result: result.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
+    return { result: resultToSend.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
   }
 }
 
