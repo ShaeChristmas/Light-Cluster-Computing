@@ -255,6 +255,7 @@ async function calcPi(Accuracy, number = 0) {
   } else {
     perdev = reps / nodev;
     n = 2;
+    resultToSend = 0;
     for (let i = 0; i < nodev; i++) {
       console.log("sending to node: ", ips[i]);
       promises.push(sendReqPi(ips[i],i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
