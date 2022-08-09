@@ -454,7 +454,7 @@ app.get("/sendComp", (req, res) => {
     busy = true;
     var min = req.body.min;
     var max = req.body.max;
-    console.log(req);
+    //console.log(req);
     PiLocal(min, max).then((data) => {
       value = data;
       //console.log("Row outputs: ",rows);
