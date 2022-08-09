@@ -249,6 +249,7 @@ async function calcPi(Accuracy, number = 0) {
       result += 4 / (n * (n + 1) * (n + 2) * op);
       op *= -1;
     }
+    console.log("Result: ", result);
     return { result: result.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
   } else {
     perdev = reps / nodev;
