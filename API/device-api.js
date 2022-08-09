@@ -263,7 +263,7 @@ async function calcPi(Accuracy, number = 0) {
         }));
     }
     await Promise.all(promises);
-    result +=3;
+    resultToSend +=3;
     return { result: resultToSend.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
   }
 }
