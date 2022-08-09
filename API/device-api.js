@@ -107,7 +107,54 @@ function sendReq(ip, matrix, point) {
   });
 }
 
-async function multiplyMatrices(matrixA, matrixB, number=0) {
+function sendReqPi(ip, min, max) {
+  return new Promise((resolve, reject) => {
+    //console.log("sendReq: "+ ip+ ' '+matrix)
+    var body = {
+      min: min,
+      max: max,
+    };
+    //console.log("vorkin?");
+    var postBody = querystring.stringify(body);
+    var options = {
+      host: ip,
+      port: 5000,
+      path: "/sendComp",
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": postBody.length,
+      },
+    };
+    var request = http.request(options, function (response) {
+      valueToReturn = null;
+      var data = "";
+      response.setEncoding("utf8");
+      response.on("data", (chunk) => {
+        data += chunk;
+        return data;
+      });
+      response.on("end", () => {
+        try {
+          valueToReturn = JSON.parse(data);
+          //console.log("Value to return: " + valueToReturn);
+        } catch {
+          reject(new Error(err));
+        }
+        resolve({
+          value: eval(data)[1],
+        });
+        //console.log("data: " + eval(data)[1]);
+      });
+    });
+    request.on("error", reject);
+    request.write(postBody);
+    request.end();
+    //console.log("Outside: "+ JSON.stringify(request.end()));
+  });
+}
+
+async function multiplyMatrices(matrixA, matrixB, number = 0) {
   // Check matrices size.
   size = Math.sqrt(matrixA.length);
   //console.log(size);
@@ -151,7 +198,7 @@ async function multiplyMatrices(matrixA, matrixB, number=0) {
     promises.push(
       sendReq(ips[i], matrixA, pointsToUse).then((data) => {
         for (let j = 0; j < data.returnRow.length; j++) {
-          newMatrix[i*amount +j] = data.returnRow[j];
+          newMatrix[i * amount + j] = data.returnRow[j];
         }
       })
     );
@@ -164,7 +211,7 @@ async function multiplyMatrices(matrixA, matrixB, number=0) {
       sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
         //console.log("SendReq Data: ",data);
         for (let i = 0; i < data.returnRow.length; i++) {
-          newMatrix[(nodev-1)*amount+i] = data.returnRow[i];
+          newMatrix[(nodev - 1) * amount + i] = data.returnRow[i];
         }
       })
     );
@@ -172,6 +219,49 @@ async function multiplyMatrices(matrixA, matrixB, number=0) {
   await Promise.all(promises);
   //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
+}
+
+async function PiLocal(min, max) {
+  op = 1;
+  result = 0;
+  for (let n = min; n <= max; n += 2) {
+    result += 4 / (n * (n + 1) * (n + 2) * op);
+    op *= -1;
+  }
+  return result;
+}
+
+async function calcPi(Accuracy, number = 0) {
+  reps = Accuracy; // Hangs at 1000000000
+  result = 3;
+  if (number == 0) {
+    var nodev = ips.length;
+  } else {
+    var nodev = number;
+  }
+  body = {};
+  promises = [];
+  if (nodev == 1) {
+    op = 1;
+    n = 2;
+    for (let n = 2; n <= 2 * reps + 1; n += 2) {
+      result += 4 / (n * (n + 1) * (n + 2) * op);
+      op *= -1;
+    }
+    return { result: result.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
+  } else {
+    perdev = reps / nodev;
+    n = 2;
+    for (let i = 0; i < nodev - 1; i++) {
+      promises
+        .push(sendReqPi(ips[i],i * perdev + 2, (i + 1) * perdev + 1))
+        .then((data) => {
+          result += data.value;
+        });
+    }
+    await Promise.all(promises);
+    return { result: result.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
+  }
 }
 
 app.use(function (req, res, next) {
@@ -323,7 +413,17 @@ app.get("/getComp", async function (req, res) {
   try {
     //("/getComp: This runnig");
     //console.log(req)
-    var result = await multiplyMatrices(req.body.matrixA, req.body.matrixB, req.body.number);
+    if (req.body.matrixA != null) {
+      var result = await multiplyMatrices(
+        req.body.matrixA,
+        req.body.matrixB,
+        req.body.number
+      );
+    } else if (req.body.accuracy != null) {
+      var result = await calcPi(req.body.accuracy, req.body.number);
+    } else {
+      var result = { error: "No calculation found" };
+    }
     res.send(result); //req.body.matrixA
     //console.log("/getComp output: \n" + result);
   } catch (exception) {
@@ -334,17 +434,30 @@ app.get("/getComp", async function (req, res) {
 
 // Receiving of Computation - Receiving from Master
 app.get("/sendComp", (req, res) => {
-  busy = true;
-  //console.log(req);
-  var matrix = req.body.matrix;
-  var points = req.body.point;
-  var rows = [];
-  multiplyMatricesLocal(matrix, points).then((data)=> {
-    rows = data;
-    //console.log("Row outputs: ",rows);
-    res.send([info.ip, rows]);
-    busy = false;
-  });
+  if (req.body.matrix != null) {
+    busy = true;
+    //console.log(req);
+    var matrix = req.body.matrix;
+    var points = req.body.point;
+    var rows = [];
+    multiplyMatricesLocal(matrix, points).then((data) => {
+      rows = data;
+      //console.log("Row outputs: ",rows);
+      res.send([info.ip, rows]);
+      busy = false;
+    });
+  } else if (req.body.min != null) {
+    busy = true;
+    //console.log(req);
+    var min = req.body.min;
+    var max = req.body.max;
+    PiLocal(min, max).then((data) => {
+      value = data;
+      //console.log("Row outputs: ",rows);
+      res.send([info.ip, value]);
+      busy = false;
+    });
+  }
 });
 
 // Listen
