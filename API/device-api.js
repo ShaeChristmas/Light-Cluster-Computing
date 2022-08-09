@@ -228,6 +228,7 @@ async function PiLocal(min, max) {
     result += 4 / (n * (n + 1) * (n + 2) * op);
     op *= -1;
   }
+  console.log("result: ", result);
   return result;
 }
 
