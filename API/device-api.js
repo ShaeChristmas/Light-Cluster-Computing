@@ -225,7 +225,7 @@ async function PiLocal(min, max) {
   console.log("min: ",typeof min," max: ",typeof max);
   op = 1;
   result = 0;
-  for (let n = min+1; n <= max; n + 2) {
+  for (let n = parseInt(min)+1; n <= parseInt(max); n + 2) {
     result += 4 / (n * (n + 1) * (n + 2) * op);
     op *= -1;
     console.log(n);
