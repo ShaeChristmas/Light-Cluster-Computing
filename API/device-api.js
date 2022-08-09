@@ -457,7 +457,7 @@ app.get("/sendComp", (req, res) => {
     //console.log(req);
     PiLocal(min, max).then((data) => {
       value = data;
-      //console.log("Row outputs: ",rows);
+      console.log("value output: ", value);
       res.send([info.ip, value]);
       busy = false;
     });
