@@ -90,10 +90,11 @@ def readyCheck():
     connection.close()
 
 # NOTE: MATRICIES MUST BE SQUARE!!!
-def multiply(matrix1, matrix2, ip=start_ip):
+def multiply(matrix1, matrix2, ip=start_ip,number=0):
     body = {
         "matrixA": matrix1, 
-        "matrixB":matrix2
+        "matrixB":matrix2,
+        "number":number
     }
     JSONbody = json.dumps(body).encode()
     #print(sys.getsizeof(JSONbody))
@@ -152,30 +153,17 @@ def localTime(matrix1, matrix2):
     print("Local Duration: ", stop-start)
     return [localResult, stop-start]
 
-def offTime(matrix1, matrix2):
+def offTime(matrix1, matrix2, number):
     offResult = createMatrix(len(matrix1),0)
     matrix1Temp = convMat(matrix2)
     matrix2Temp = convMat(matrix1)
     #start timer.
     start = time.time()
     # multiply
-    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.14")
+    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.14", number)
     #stop timer.
     stop = time.time()
     print("Off Duration: ", stop-start)
-    return [offResult,stop-start]
-
-def singleOffTime(matrix1, matrix2):
-    offResult = createMatrix(len(matrix1),0)
-    matrix1Temp = convMat(matrix2)
-    matrix2Temp = convMat(matrix1)
-    #start timer.
-    start = time.time()
-    # multiply
-    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.15")
-    #stop timer.
-    stop = time.time()
-    print("Off 1 Duration: ", stop-start)
     return [offResult,stop-start]
 
 def runTest(size):
@@ -190,7 +178,7 @@ def runTest(size):
     # Measure Time to multiply locally
     resultMatrixLocal = localTime(matrixA, matrixB)
     # Perform offloading with 1 device (Remember to start localhost API first)
-    resultMatrixOff1 = singleOffTime(matrixA, matrixB)
+    resultMatrixOff1 = offTime(matrixA, matrixB, number = 1)
     # Perform offloading with proposed Architecture
     resultMatrixOff3 = offTime(matrixA, matrixB)
     #print(matrixA)

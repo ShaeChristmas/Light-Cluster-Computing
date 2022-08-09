@@ -107,7 +107,7 @@ function sendReq(ip, matrix, point) {
   });
 }
 
-async function multiplyMatrices(matrixA, matrixB) {
+async function multiplyMatrices(matrixA, matrixB, number=0) {
   // Check matrices size.
   size = Math.sqrt(matrixA.length);
   //console.log(size);
@@ -119,7 +119,11 @@ async function multiplyMatrices(matrixA, matrixB) {
     .fill(0)
     .map(() => Array(size).fill(0));
   //console.log(newMatrix);
-  var nodev = ips.length;
+  if (number == 0) {
+    var nodev = ips.length;
+  } else {
+    var nodev = number;
+  }
 
   var promises = [];
   var points = [];
@@ -319,7 +323,7 @@ app.get("/getComp", async function (req, res) {
   try {
     //("/getComp: This runnig");
     //console.log(req)
-    var result = await multiplyMatrices(req.body.matrixA, req.body.matrixB);
+    var result = await multiplyMatrices(req.body.matrixA, req.body.matrixB, req.body.number);
     res.send(result); //req.body.matrixA
     //console.log("/getComp output: \n" + result);
   } catch (exception) {
