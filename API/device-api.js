@@ -224,7 +224,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
 async function PiLocal(min, max) {
   op = 1;
   result = 0;
-  for (let n = min; n <= max; n += 2) {
+  for (let n = min+1; n <= max; n += 2) {
     result += 4 / (n * (n + 1) * (n + 2) * op);
     op *= -1;
   }
@@ -257,7 +257,7 @@ async function calcPi(Accuracy, number = 0) {
     n = 2;
     for (let i = 0; i < nodev; i++) {
       console.log("sending to node: ", ips[i]);
-      promises.push(sendReqPi(ips[i],i * perdev + 2, (i + 1) * perdev + 1).then((data) => {
+      promises.push(sendReqPi(ips[i],i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
           result += data.value;
         }));
     }
