@@ -255,6 +255,7 @@ async function calcPi(Accuracy, number = 0) {
     console.log("Result: ", result);
     return { result: result.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
   } else {
+    result = 3;
     perdev = reps / nodev;
     n = 2;
     for (let i = 0; i < nodev; i++) {
