@@ -112,7 +112,7 @@ function sendReqPi(ip, min, max) {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       min: min,
-      max: max,
+      max: max
     };
     //console.log("vorkin?");
     var postBody = querystring.stringify(body);
@@ -137,14 +137,14 @@ function sendReqPi(ip, min, max) {
       response.on("end", () => {
         try {
           valueToReturn = JSON.parse(data);
-          //console.log("Value to return: " + valueToReturn);
+          console.log("Value to return: " + valueToReturn);
         } catch {
           reject(new Error(err));
         }
         resolve({
           value: eval(data)[1],
         });
-        //console.log("data: " + eval(data)[1]);
+        console.log("data: " + eval(data)[1]);
       });
     });
     request.on("error", reject);
