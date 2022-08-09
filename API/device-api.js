@@ -232,6 +232,7 @@ async function PiLocal(min, max) {
 }
 
 async function calcPi(Accuracy, number = 0) {
+  console.log("Running Pi Calculation with Accuracy: ", Accuracy, ", Number: ", number);
   reps = Accuracy; // Hangs at 1000000000
   result = 3;
   if (number == 0) {
@@ -409,7 +410,7 @@ app.get("/compVal", async function (req, res) {
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
   try {
-    //("/getComp: This runnig");
+    console.log("/getComp: This runnig");
     //console.log(req)
     if (req.body.matrixA != null) {
       var result = await multiplyMatrices(
@@ -418,6 +419,7 @@ app.get("/getComp", async function (req, res) {
         req.body.number
       );
     } else if (req.body.accuracy != null) {
+      console.log("Identified as Pi Calculation");
       var result = await calcPi(req.body.accuracy, req.body.number);
     } else {
       var result = { error: "No calculation found" };
@@ -445,6 +447,7 @@ app.get("/sendComp", (req, res) => {
       busy = false;
     });
   } else if (req.body.min != null) {
+    console.log("Identified as Pi Calculation in /sendComp");
     busy = true;
     //console.log(req);
     var min = req.body.min;
