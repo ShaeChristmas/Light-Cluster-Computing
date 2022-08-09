@@ -1,0 +1,12 @@
+title Architecture Device Status Communication
+
+Client->Device1: Send request for System Device Status
+Device1->Device2: Send request for Individual device status
+Device1->Device3: Send request for Individual device status
+
+Device1<-Device3: Send back device status
+Device1<-Device2: Send back device status
+
+note over Device1: Consolidate all device status
+
+Client<-Device1: Respond to request for System Device status with collected device status

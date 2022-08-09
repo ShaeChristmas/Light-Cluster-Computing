@@ -1,0 +1,12 @@
+title Architecture Device Info Communication
+
+Client->Device1: Send request for System Device Info
+Device1->Device2: Send request for Individual device data
+Device1->Device3: Send request for Individual device data
+
+Device1<-Device3: Send back device data
+Device1<-Device2: Send back device data
+
+note over Device1: Consolidate all device data
+
+Client<-Device1: Respond to request for System Device info with collected device info
