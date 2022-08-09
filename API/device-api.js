@@ -254,7 +254,7 @@ async function calcPi(Accuracy, number = 0) {
   } else {
     perdev = reps / nodev;
     n = 2;
-    for (let i = 0; i < nodev - 1; i++) {
+    for (let i = 0; i < nodev; i++) {
       console.log("sending to node: ", ips[i]);
       promises.push(sendReqPi(ips[i],i * perdev + 2, (i + 1) * perdev + 1).then((data) => {
           result += data.value;
@@ -451,9 +451,9 @@ app.get("/sendComp", (req, res) => {
   } else if (req.body.min != null) {
     console.log("Identified as Pi Calculation in /sendComp");
     busy = true;
-    //console.log(req);
     var min = req.body.min;
     var max = req.body.max;
+    console.log(req);
     PiLocal(min, max).then((data) => {
       value = data;
       //console.log("Row outputs: ",rows);
