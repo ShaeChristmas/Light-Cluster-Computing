@@ -61,7 +61,7 @@ async function multiplyMatricesLocal(matrixA, points) {
 }
 
 function sendReq(ip, matrix, point) {
-  promise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       matrix: matrix,
@@ -97,7 +97,7 @@ function sendReq(ip, matrix, point) {
         resolve({
           returnRow: eval(data)[1],
         });
-        //console.log("data: " + eval(data)[1]);
+        console.log("data: " + eval(data)[1]);
       });
     });
     request.on("error", () => {
@@ -106,11 +106,10 @@ function sendReq(ip, matrix, point) {
       console.log(index);
       ips.splice(index,1);
       console.log(ips);
-      promise = sendReq(ips[0],matrix,point);
+      return sendReq(ips[0],matrix,point);
     });
     request.write(postBody);
     request.end();
-    return promise
     //console.log("Outside: "+ JSON.stringify(request.end()));
   });
 }
