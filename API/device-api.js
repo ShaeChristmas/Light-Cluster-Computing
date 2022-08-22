@@ -452,6 +452,7 @@ app.get("/getComp", async function (req, res) {
     //console.log("/getComp: This runnig");
     //console.log(req)
     if (req.body.matrixA != null) {
+      console.log("Matrix Calc \n",req.body.matrixA,req.body.matrixB,req.body.number)
       var result = await multiplyMatrices(
         req.body.matrixA,
         req.body.matrixB,
