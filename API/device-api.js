@@ -215,6 +215,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
           newMatrix[(nodev - 1) * amount + i] = data.returnRow[i];
         }
       }).catch((rejection) => {
+        console.log(rejection);
         if (i != nodev -1) {
           newIndex = i+1;
         }else {
