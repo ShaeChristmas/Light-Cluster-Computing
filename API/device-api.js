@@ -468,9 +468,9 @@ app.get("/getComp", async function (req, res) {
     console.log("oops");
     console.log(exception);
     // remove refused IP.
-
-    //var result = await selfReq(req.body);
-    //res.send(result);
+    ips = ips.splice(ips.indexOf(exception),1);
+    var result = await selfReq(req.body);
+    res.send(result);
 
   }
 });
