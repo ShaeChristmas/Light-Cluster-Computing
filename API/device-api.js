@@ -103,9 +103,8 @@ function sendReq(ip, matrix, point) {
     request.on("error", () => {
       console.log("rejected on ",ip);
       index = ips.indexOf(ip);
-      console.log(index);
       ips.splice(index,1);
-      console.log(ips);
+      console.log(ips[0],matrix,point);
       return sendReq(ips[0],matrix,point);
     });
     request.write(postBody);
