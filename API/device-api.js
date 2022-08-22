@@ -109,7 +109,7 @@ function sendReq(ip, matrix, point) {
     });
     //request.on("error", reject);
     request.on("error", () => {
-      var index = ips.indexOf(ip);
+      var index = ips.indexOf(ip.toString);
       try {
         ipsNew = ips.splice(index, 1);
         index = ipsNew[0]
