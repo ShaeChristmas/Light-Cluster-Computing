@@ -437,7 +437,7 @@ function selfReq(body) {
     request.on("timeout", () => {
       request.destroy();
     });
-    request.on(reject, () => {
+    request.on("error", () => {
       console.log("Rejected");
     }) 
     request.write(querystring.stringify(body));
