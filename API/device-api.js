@@ -436,6 +436,9 @@ function selfReq(body) {
     request.on("timeout", () => {
       request.destroy();
     });
+    request.on(reject, () => {
+      console.log("Rejected");
+    }) 
     request.write(body)
     request.end();
   });
