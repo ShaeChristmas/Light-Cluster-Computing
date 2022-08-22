@@ -101,7 +101,9 @@ function sendReq(ip, matrix, point) {
       });
     });
     request.on("error", () => {
-      console.log("gets rejected");
+      console.log("rejected on ",ip);
+      ips = ips.splice(ips.indexOf(ip),1);
+      sendReq(ips[0],matrix,point);
       reject;
     });
     request.write(postBody);
