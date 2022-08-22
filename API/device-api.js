@@ -450,7 +450,7 @@ app.get("/compVal", async function (req, res) {
 app.get("/getComp", async function (req, res) {
   try {
     //console.log("/getComp: This runnig");
-    console.log(req)
+    //console.log(req)
     if (req.body.matrixA != null) {
       var result = await multiplyMatrices(
         req.body.matrixA,
