@@ -459,7 +459,7 @@ app.get("/getComp", async function (req, res) {
       //console.log("Identified as Pi Calculation");
       var result = await calcPi(req.body.accuracy, req.body.number);
     } else {
-      var result = { error: "No calculation found" };
+      var result = { error: "No calculation found", body: req.body };
     }
     res.send(result); //req.body.matrixA
     //console.log("/getComp output: \n" + result);
