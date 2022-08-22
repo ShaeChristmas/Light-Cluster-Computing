@@ -93,7 +93,7 @@ function sendReq(ip, matrix, point) {
 
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          reject(new Error(err) +"\n IP: "+ip,+", POINT: "+point);
+          reject([0,ip,point]);
         }
         resolve({
           returnRow: eval(data)[1],
@@ -101,7 +101,7 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    request.on("error", reject("IP: "+ip+", POINT: "+point));
+    request.on("error", reject([0,ip,point]));
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
