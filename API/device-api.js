@@ -111,10 +111,11 @@ function sendReq(ip, matrix, point) {
       var index = ips.indexOf(ip);
       if (index > -1) {
         ips = ips.splice(index, 1);
+        index = ips[0]
       } else {
         console.log("Error with index incountered");
       }
-      return sendReq(ips[0], matrix, point);
+      return sendReq(ips[index], matrix, point);
     });
     request.write(postBody);
     request.end();
