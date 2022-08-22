@@ -433,7 +433,7 @@ app.get("/getComp", async function (req, res) {
     //console.log("/getComp output: \n" + result);
   } catch (exception) {
     console.log("oops");
-    console.log(exception);
+    console.log(exception[0]);
   }
 });
 
