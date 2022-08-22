@@ -92,10 +92,14 @@ function sendReq(ip, matrix, point) {
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          var index = ips.indexOf(ip);
+          var index = ips.indexOf(ip.toString());
           try {
-            ips.splice(index, 1);
-            return sendReq(ips[0], matrix, point);
+            ipsNew = ips.splice(index, 1);
+            index = ipsNew[0];
+            console.log(index, "\n", matrix, "\n", point);
+            newPromise = sendReq(index, matrix, point);
+            print("sending successful");
+            return newPromise;
           } catch {
             console.log("Error with index incountered");
             reject("Ip invalid");
@@ -113,7 +117,7 @@ function sendReq(ip, matrix, point) {
       try {
         ipsNew = ips.splice(index, 1);
         index = ipsNew[0];
-        console.log(index,"\n",matrix,"\n",point);
+        console.log(index, "\n", matrix, "\n", point);
         newPromise = sendReq(index, matrix, point);
         print("sending successful");
         return newPromise;
@@ -180,8 +184,8 @@ function sendReqPi(ip, min, max) {
       if (index > -1) {
         ips.splice(index, 1);
       } else {
-        console.log(ips)
-        console.log(ip)
+        console.log(ips);
+        console.log(ip);
         console.log("Error with index incountered");
       }
       return sendReqPi(ips[0], min, max);
