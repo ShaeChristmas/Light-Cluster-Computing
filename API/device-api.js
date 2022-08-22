@@ -412,6 +412,7 @@ app.get("/compVal", async function (req, res) {
 });
 
 function selfReq(body) {
+  console.log(body);
   return new Promise((resolve, reject) => {
     var request = http.request(
       {
@@ -459,7 +460,7 @@ app.get("/getComp", async function (req, res) {
       //console.log("Identified as Pi Calculation");
       var result = await calcPi(req.body.accuracy, req.body.number);
     } else {
-      var result = { error: "No calculation found", body: req.body };
+      var result = { error: "No calculation found"};
     }
     res.send(result); //req.body.matrixA
     //console.log("/getComp output: \n" + result);
