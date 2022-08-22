@@ -112,7 +112,7 @@ function sendReq(ip, matrix, point) {
       var index = ips.indexOf(ip.toString());
       try {
         ipsNew = ips.splice(index, 1);
-        index = ipsNew[0]
+        index = ipsNew[0];
         console.log(index,"\n",matrix,"\n",point);
         newPromise = sendReq(index, matrix, point);
         print("sending successful");
