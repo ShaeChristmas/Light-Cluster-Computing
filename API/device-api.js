@@ -112,6 +112,7 @@ function sendReq(ip, matrix, point) {
       if (index > -1) {
         ipsNew = ips.splice(index, 1);
         index = ipsNew[0]
+        console.log(index,"\n",matrix,"\n",point);
         return sendReq(index, matrix, point);
       } else {
         console.log("Error with index incountered");
