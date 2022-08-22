@@ -93,7 +93,8 @@ function sendReq(ip, matrix, point) {
           //console.log("Value to return: " + valueToReturn);
         } catch {
           try {
-            return sendReq("127.0.1.1", matrix, point);
+            console.log("sent to local");
+            return sendReq("localhost", matrix, point);
           } catch {
             console.log("Error with ip incountered");
             reject("Ip invalid");
@@ -108,7 +109,8 @@ function sendReq(ip, matrix, point) {
     //request.on("error", reject);
     request.on("error", () => {
       try {
-        return sendReq("127.0.1.1", matrix, point);
+        console.log("sent to local");
+        return sendReq("localhost", matrix, point);
       } catch {
         console.log("Error with ip incountered");
         reject("Ip invalid");
