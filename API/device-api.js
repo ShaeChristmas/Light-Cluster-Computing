@@ -94,7 +94,6 @@ function sendReq(ip, matrix, point) {
         } catch {
           reject(new Error(err));
         }
-        console.log(eval(data));
         resolve({
           returnRow: eval(data)[1],
         });
@@ -104,7 +103,6 @@ function sendReq(ip, matrix, point) {
       console.log("rejected on ",ip);
       index = ips.indexOf(ip);
       ips.splice(index,1);
-      console.log(ips[0],matrix,point);
       return sendReq(ips[0],matrix,point).then((data) => {
         resolve({
           returnRow: data.returnRow
@@ -157,7 +155,16 @@ function sendReqPi(ip, min, max) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    request.on("error", reject);
+    request.on("error", () => {
+      console.log("rejected on ",ip);
+      index = ips.indexOf(ip);
+      ips.splice(index,1);
+      return sendReqPi(ips[0],min,max).then((data) => {
+        resolve({
+          value: data.value
+        });
+      });
+    });
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
