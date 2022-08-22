@@ -61,7 +61,7 @@ async function multiplyMatricesLocal(matrixA, points) {
 }
 
 function sendReq(ip, matrix, point) {
-  promise = MakeQuerablePromise(new Promise((resolve, reject) => {
+  promise = makeQuerablePromise(new Promise((resolve, reject) => {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       matrix: matrix,
