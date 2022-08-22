@@ -475,6 +475,7 @@ app.get("/getComp", async function (req, res) {
 
 // Receiving of Computation - Receiving from Master
 app.get("/sendComp", (req, res) => {
+  console.log("recieved as loop.");
   if (req.body.matrix != null) {
     busy = true;
     //console.log(req);
