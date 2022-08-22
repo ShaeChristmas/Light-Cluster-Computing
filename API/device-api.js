@@ -92,7 +92,7 @@ function sendReq(ip, matrix, point) {
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          reject();
+          reject(new Error(err));
         }
         resolve({
           returnRow: eval(data)[1],
@@ -100,10 +100,7 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    //request.on("error", reject);
-    request.on("error", () => {
-      reject();
-    });
+    request.on("error", reject);
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
@@ -115,7 +112,7 @@ function sendReqPi(ip, min, max) {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       min: min,
-      max: max,
+      max: max
     };
     //console.log("vorkin?");
     var postBody = querystring.stringify(body);
@@ -142,13 +139,7 @@ function sendReqPi(ip, min, max) {
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          var index = ips.indexOf(ip);
-          if (index > -1) {
-            ips.splice(index, 1);
-          } else {
-            console.log("Error with index incountered");
-          }
-          return sendReqPi(ips[0], min, max);
+          reject(new Error(err));
         }
         resolve({
           value: eval(data)[1],
@@ -156,18 +147,7 @@ function sendReqPi(ip, min, max) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    //request.on("error", reject);
-    request.on("error", () => {
-      var index = ips.indexOf(ip);
-      if (index > -1) {
-        ips.splice(index, 1);
-      } else {
-        console.log(ips);
-        console.log(ip);
-        console.log("Error with index incountered");
-      }
-      return sendReqPi(ips[0], min, max);
-    });
+    request.on("error", reject);
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
@@ -237,16 +217,6 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     );
   }
   await Promise.all(promises);
-  
-  /*for (let i=0; i<promises.size; i++) {
-    if (promises[i].data != null) {
-      try {
-        Console.log(promises[i].body.point);
-      } catch {
-        console.log("not way to get data.");
-      }
-    }
-  }*/
   //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
@@ -254,9 +224,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
 async function PiLocal(min, max) {
   //console.log("min: ",typeof min," max: ",typeof max);
   result = 0;
-  for (let n = parseInt(min) + 1; n <= parseInt(max); n += 4) {
+  for (let n = parseInt(min)+1; n <= parseInt(max); n += 4) {
     result += 4 / (n * (n + 1) * (n + 2));
-    result -= 4 / ((n + 2) * (n + 3) * (n + 4));
+    result -= 4 / ((n+2) * (n + 3) * (n + 4));
   }
   //console.log("result: ", result);
   return result;
@@ -288,17 +258,13 @@ async function calcPi(Accuracy, number = 0) {
     resultToSend = 0;
     for (let i = 0; i < nodev; i++) {
       //console.log("sending to node: ", ips[i]);
-      promises.push(
-        sendReqPi(ips[i], i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
+      promises.push(sendReqPi(ips[i],i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
           resultToSend += data.value;
-        })
-      );
+        }));
     }
     await Promise.all(promises);
-    resultToSend += 3;
-    return {
-      result: resultToSend.toString().replace(/(\.0*|(?<=(\..*))0*)$/, ""),
-    };
+    resultToSend +=3;
+    return { result: resultToSend.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
   }
 }
 
@@ -451,7 +417,6 @@ app.get("/getComp", async function (req, res) {
     //console.log("/getComp: This runnig");
     //console.log(req)
     if (req.body.matrixA != null) {
-      console.log("Matrix Calc \n",req.body.matrixA,req.body.matrixB,req.body.number)
       var result = await multiplyMatrices(
         req.body.matrixA,
         req.body.matrixB,
@@ -473,7 +438,6 @@ app.get("/getComp", async function (req, res) {
 
 // Receiving of Computation - Receiving from Master
 app.get("/sendComp", (req, res) => {
-  console.log("recieved as loop.");
   if (req.body.matrix != null) {
     busy = true;
     //console.log(req);
