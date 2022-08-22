@@ -110,7 +110,7 @@ function sendReq(ip, matrix, point) {
     request.on("error", () => {
       var index = ips.indexOf(ip);
       if (index > -1) {
-        ips.splice(index, 1);
+        ips = ips.splice(index, 1);
       } else {
         console.log("Error with index incountered");
       }
