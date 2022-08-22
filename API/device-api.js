@@ -439,7 +439,7 @@ function selfReq(body) {
     request.on(reject, () => {
       console.log("Rejected");
     }) 
-    request.write(body)
+    request.write(body.toString());
     request.end();
   });
 }
