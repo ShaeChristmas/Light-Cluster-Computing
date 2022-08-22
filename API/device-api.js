@@ -97,7 +97,7 @@ function sendReq(ip, matrix, point) {
         resolve({
           returnRow: eval(data)[1],
         });
-        console.log("data: " + eval(data)[1]);
+        console.log("IP: "+ip+" data: " + eval(data)[1]);
       });
     });
     request.on("error", () => {
