@@ -92,7 +92,7 @@ function sendReq(ip, matrix, point) {
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          reject(new Error(err));
+          reject([ip,new Error(err)]);
         }
         resolve({
           returnRow: eval(data)[1],
