@@ -100,7 +100,7 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    request.on("error", reject([0,ip,point]));
+    request.on("error", reject);
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
@@ -189,7 +189,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   amount = Math.ceil(num / nodev);
   //console.log("Amount: ", amount);
   var curcount = 0;
-  for (let i = 0; i <= nodev - 1; i++) {
+  for (let i = 0; i < nodev - 1; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
 
@@ -217,9 +217,6 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     );
   }
   await Promise.all(promises);
-  for (let i =0; i< promises.length;i++) {
-    console.log(promises[i]);
-  }
   //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
@@ -435,7 +432,7 @@ app.get("/getComp", async function (req, res) {
     //console.log("/getComp output: \n" + result);
   } catch (exception) {
     console.log("oops");
-    console.log(exception)
+    console.log(exception);
   }
 });
 
@@ -443,13 +440,13 @@ app.get("/getComp", async function (req, res) {
 app.get("/sendComp", (req, res) => {
   if (req.body.matrix != null) {
     busy = true;
-    console.log(req.body);
+    //console.log(req);
     var matrix = req.body.matrix;
     var points = req.body.point;
     var rows = [];
     multiplyMatricesLocal(matrix, points).then((data) => {
       rows = data;
-      console.log("Row outputs: ",rows);
+      //console.log("Row outputs: ",rows);
       res.send([info.ip, rows]);
       busy = false;
     });
