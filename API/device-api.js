@@ -89,6 +89,7 @@ function sendReq(ip, matrix, point) {
       });
       response.on("end", () => {
         try {
+          console.log("Function Ends");
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
