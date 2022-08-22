@@ -100,7 +100,7 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    response.on("error", reject(ip));
+    request.on("error", reject);
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
@@ -213,8 +213,19 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
         for (let i = 0; i < data.returnRow.length; i++) {
           newMatrix[(nodev - 1) * amount + i] = data.returnRow[i];
         }
-      })
-    );
+      }).catch((rejection) => {
+        if (i != nodev -1) {
+          newIndex = i+1;
+        }else {
+          newIndex = 0;
+        }
+        sendReq(ips[newIndex], matrixA, pointsToUse).then((data) => {
+          //console.log("SendReq Data: ",data);
+          for (let i = 0; i < data.returnRow.length; i++) {
+            newMatrix[(newIndex - 1) * amount + i] = data.returnRow[i];
+          }
+      });
+    }));
   }
   await Promise.all(promises);
   //console.log("Returning Matrix: ",newMatrix);
@@ -279,6 +290,7 @@ app.use(function (req, res, next) {
 
 // Required Info
 var info = require("./local.json");
+const e = require("express");
 let name = info.name;
 let ip = info.ip;
 let mac = info.mac;
@@ -411,40 +423,6 @@ app.get("/compVal", async function (req, res) {
   res.send(ready);
 });
 
-function selfReq(body) {
-  console.log(body);
-  return new Promise((resolve, reject) => {
-    var request = http.request(
-      {
-        host: "localhost",
-        port: 5000,
-        path: "/getComp",
-        method: "GET",
-        timeout: 500,
-      },
-      function (response) {
-        var data = "";
-        response.setEncoding("utf8");
-        response.on("data", (chunk) => {
-          data += chunk;
-        });
-        response.on("end", () => {
-          //res.end(data);
-          resolve(data);
-        });
-      }
-    );
-    request.on("timeout", () => {
-      request.destroy();
-    });
-    request.on("error", () => {
-      console.log("Rejected");
-    }) 
-    request.write(querystring.stringify(body));
-    request.end();
-  });
-}
-
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
   try {
@@ -460,18 +438,13 @@ app.get("/getComp", async function (req, res) {
       //console.log("Identified as Pi Calculation");
       var result = await calcPi(req.body.accuracy, req.body.number);
     } else {
-      var result = { error: "No calculation found"};
+      var result = { error: "No calculation found" };
     }
     res.send(result); //req.body.matrixA
     //console.log("/getComp output: \n" + result);
   } catch (exception) {
     console.log("oops");
     console.log(exception);
-    // remove refused IP.
-    ips = ips.splice(ips.indexOf(exception),1);
-    var result = await selfReq(req.body);
-    res.send(result);
-
   }
 });
 
