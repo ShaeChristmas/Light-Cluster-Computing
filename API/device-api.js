@@ -218,6 +218,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     );
   }
   await Promise.all(promises);
+  for (let i =0; i< promises.length;i++) {
+    console.log(promises[i]);
+  }
   //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
@@ -433,7 +436,7 @@ app.get("/getComp", async function (req, res) {
     //console.log("/getComp output: \n" + result);
   } catch (exception) {
     console.log("oops");
-    console.log(exception[0]);
+    console.log(exception)
   }
 });
 
