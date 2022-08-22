@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+require("amplify")
 var path = require("path");
 const app = express();
 var http = require("http");
@@ -61,7 +62,7 @@ async function multiplyMatricesLocal(matrixA, points) {
 }
 
 function sendReq(ip, matrix, point) {
-  promise = makeQuerablePromise(new Promise((resolve, reject) => {
+  promise = new Promise((resolve, reject) => {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       matrix: matrix,
@@ -107,7 +108,7 @@ function sendReq(ip, matrix, point) {
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
-  }));
+  });
   return promise;
 }
 
@@ -239,8 +240,8 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   }
   await Promise.all(promises);
   for (let i=0; i<promises.size; i++) {
-    if (promises[i].isRejected()) {
-      Console.log(promises[i].body.matrixA);
+    if (promises[i].data != null) {
+      Console.log(promises[i].body.point);
     }
   }
   //console.log("Returning Matrix: ",newMatrix);
