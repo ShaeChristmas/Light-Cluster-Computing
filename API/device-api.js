@@ -440,7 +440,7 @@ function selfReq(body) {
     request.on(reject, () => {
       console.log("Rejected");
     }) 
-    request.write(body.toString());
+    request.write(querystring.stringify(body));
     request.end();
   });
 }
