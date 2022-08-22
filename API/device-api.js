@@ -100,7 +100,7 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    request.on("error", reject({ip: ip}));
+    request.on("error", reject);
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
@@ -207,27 +207,14 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   //console.log("Points: ", pointsToUse);
   // Set each as promise
   if (pointsToUse.length > 0) {
-    var i = 0;
     promises.push(
       sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
         //console.log("SendReq Data: ",data);
-        for (i = 0; i < data.returnRow.length; i++) {
+        for (let i = 0; i < data.returnRow.length; i++) {
           newMatrix[(nodev - 1) * amount + i] = data.returnRow[i];
         }
-      }).catch((rejection) => {
-        console.log(rejection);
-        if (i != nodev -1) {
-          newIndex = i+1;
-        }else {
-          newIndex = 0;
-        }
-        sendReq(ips[newIndex], matrixA, pointsToUse).then((data) => {
-          //console.log("SendReq Data: ",data);
-          for (let i = 0; i < data.returnRow.length; i++) {
-            newMatrix[(newIndex - 1) * amount + i] = data.returnRow[i];
-          }
-      });
-    }));
+      })
+    );
   }
   await Promise.all(promises);
   //console.log("Returning Matrix: ",newMatrix);
@@ -292,7 +279,6 @@ app.use(function (req, res, next) {
 
 // Required Info
 var info = require("./local.json");
-const e = require("express");
 let name = info.name;
 let ip = info.ip;
 let mac = info.mac;
