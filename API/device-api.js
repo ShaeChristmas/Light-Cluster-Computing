@@ -101,7 +101,7 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    request.on("error", reject);
+    request.on("error", reject(new Error(err) +"\n IP: "+ip,+", POINT: "+point));
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
