@@ -90,9 +90,10 @@ function sendReq(ip, matrix, point) {
       response.on("end", () => {
         try {
           valueToReturn = JSON.parse(data);
+
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          reject(new Error(err));
+          reject(new Error(err) +"\n IP: "+ip,+", POINT: "+point);
         }
         resolve({
           returnRow: eval(data)[1],
