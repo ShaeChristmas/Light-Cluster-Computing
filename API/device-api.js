@@ -238,7 +238,8 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     );
   }
   await Promise.all(promises);
-  for (let i=0; i<promises.size; i++) {
+  
+  /*for (let i=0; i<promises.size; i++) {
     if (promises[i].data != null) {
       try {
         Console.log(promises[i].body.point);
@@ -246,7 +247,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
         console.log("not way to get data.");
       }
     }
-  }
+  }*/
   //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
