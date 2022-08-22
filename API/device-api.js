@@ -1,6 +1,5 @@
 const express = require("express");
 const fs = require("fs");
-require("amplify")
 var path = require("path");
 const app = express();
 var http = require("http");
