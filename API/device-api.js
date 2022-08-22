@@ -97,7 +97,6 @@ function sendReq(ip, matrix, point) {
         resolve({
           returnRow: eval(data)[1],
         });
-        console.log("IP: "+ip+" data: " + eval(data)[1]);
       });
     });
     request.on("error", () => {
@@ -195,7 +194,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   amount = Math.ceil(num / nodev);
   //console.log("Amount: ", amount);
   var curcount = 0;
-  for (let i = 0; i < nodev; i++) {
+  for (let i = 0; i < nodev - 1; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
 
