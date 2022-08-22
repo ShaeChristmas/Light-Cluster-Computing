@@ -93,12 +93,13 @@ function sendReq(ip, matrix, point) {
           //console.log("Value to return: " + valueToReturn);
         } catch {
           var index = ips.indexOf(ip);
-          if (index > -1) {
+          try {
             ips.splice(index, 1);
-          } else {
+            return sendReq(ips[0], matrix, point);
+          } catch {
             console.log("Error with index incountered");
+            reject("Ip invalid");
           }
-          return sendReq(ips[0], matrix, point);
         }
         resolve({
           returnRow: eval(data)[1],
@@ -109,12 +110,12 @@ function sendReq(ip, matrix, point) {
     //request.on("error", reject);
     request.on("error", () => {
       var index = ips.indexOf(ip);
-      if (index > -1) {
+      try {
         ipsNew = ips.splice(index, 1);
         index = ipsNew[0]
         console.log(index,"\n",matrix,"\n",point);
         return sendReq(index, matrix, point);
-      } else {
+      } catch {
         console.log("Error with index incountered");
         reject("Ip invalid");
       }
