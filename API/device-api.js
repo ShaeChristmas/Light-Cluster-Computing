@@ -105,7 +105,11 @@ function sendReq(ip, matrix, point) {
       index = ips.indexOf(ip);
       ips.splice(index,1);
       console.log(ips[0],matrix,point);
-      return sendReq(ips[0],matrix,point);
+      return sendReq(ips[0],matrix,point).then((data) => {
+        resolve({
+          returnRow: data.returnRow
+        });
+      });
     });
     request.write(postBody);
     request.end();
