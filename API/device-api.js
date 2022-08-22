@@ -61,7 +61,7 @@ async function multiplyMatricesLocal(matrixA, points) {
 }
 
 function sendReq(ip, matrix, point) {
-  promise = new Promise((resolve, reject) => {
+  promise = MakeQuerablePromise(new Promise((resolve, reject) => {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       matrix: matrix,
@@ -92,13 +92,7 @@ function sendReq(ip, matrix, point) {
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          try {
-            console.log("sent to local");
-            promise = sendReq("localhost", matrix, point);
-          } catch {
-            console.log("Error with ip incountered");
-            reject("Ip invalid");
-          }
+          reject();
         }
         resolve({
           returnRow: eval(data)[1],
@@ -108,18 +102,12 @@ function sendReq(ip, matrix, point) {
     });
     //request.on("error", reject);
     request.on("error", () => {
-      try {
-        console.log("sent to local");
-        promise = sendReq("localhost", matrix, point);
-      } catch {
-        console.log("Error with ip incountered");
-        reject("Ip invalid");
-      }
+      reject();
     });
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
-  });
+  }));
   return promise;
 }
 
@@ -250,6 +238,11 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     );
   }
   await Promise.all(promises);
+  for (let i=0; i<promises.size; i++) {
+    if (promises[i].isRejected()) {
+      Console.log(promises[i].body.matrixA);
+    }
+  }
   //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
