@@ -100,7 +100,7 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    request.on("error", reject);
+    request.on("error", reject([err,ip]));
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
@@ -217,9 +217,6 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     );
   }
   await Promise.all(promises);
-  for (let i=0; i < promises.length; i++) {
-    console.log(promises[i].toString());
-  }
   //console.log("Returning Matrix: ",newMatrix);
   return newMatrix;
 }
@@ -414,6 +411,36 @@ app.get("/compVal", async function (req, res) {
   res.send(ready);
 });
 
+function selfReq(body) {
+  return new Promise((resolve, reject) => {
+    var request = http.request(
+      {
+        host: "localhost",
+        port: 5000,
+        path: "/getComp",
+        method: "GET",
+        timeout: 500,
+      },
+      function (response) {
+        var data = "";
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          data += chunk;
+        });
+        response.on("end", () => {
+          //res.end(data);
+          resolve(data);
+        });
+      }
+    );
+    request.on("timeout", () => {
+      request.destroy();
+    });
+    request.write(body)
+    request.end();
+  });
+}
+
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
   try {
@@ -436,6 +463,10 @@ app.get("/getComp", async function (req, res) {
   } catch (exception) {
     console.log("oops");
     console.log(exception);
+    // remove refused IP.
+
+    var result = await selfReq(req.body);
+
   }
 });
 
