@@ -92,6 +92,7 @@ function sendReq(ip, matrix, point) {
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
+          console.log("Gets rejected.");
           reject(new Error(err));
         }
         resolve({
