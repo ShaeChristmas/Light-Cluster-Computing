@@ -240,7 +240,11 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   await Promise.all(promises);
   for (let i=0; i<promises.size; i++) {
     if (promises[i].data != null) {
-      Console.log(promises[i].body.point);
+      try {
+        Console.log(promises[i].body.point);
+      } catch {
+        console.log("not way to get data.");
+      }
     }
   }
   //console.log("Returning Matrix: ",newMatrix);
