@@ -92,7 +92,6 @@ function sendReq(ip, matrix, point) {
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
-          console.log("Gets rejected.");
           reject(new Error(err));
         }
         resolve({
@@ -101,7 +100,10 @@ function sendReq(ip, matrix, point) {
         //console.log("data: " + eval(data)[1]);
       });
     });
-    request.on("error", reject);
+    request.on("error", () => {
+      console.log("gets rejected");
+      reject;
+    });
     request.write(postBody);
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
