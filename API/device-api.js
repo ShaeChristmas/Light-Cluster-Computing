@@ -174,6 +174,8 @@ function sendReqPi(ip, min, max) {
       if (index > -1) {
         ips.splice(index, 1);
       } else {
+        console.log(ips)
+        console.log(ip)
         console.log("Error with index incountered");
       }
       return sendReqPi(ips[0], min, max);
