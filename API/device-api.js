@@ -89,7 +89,6 @@ function sendReq(ip, matrix, point) {
       });
       response.on("end", () => {
         try {
-          console.log("Function Ends");
           valueToReturn = JSON.parse(data);
           //console.log("Value to return: " + valueToReturn);
         } catch {
@@ -444,7 +443,7 @@ app.get("/getComp", async function (req, res) {
 app.get("/sendComp", (req, res) => {
   if (req.body.matrix != null) {
     busy = true;
-    //console.log(req);
+    console.log(req.body);
     var matrix = req.body.matrix;
     var points = req.body.point;
     var rows = [];
