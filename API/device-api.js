@@ -106,7 +106,7 @@ function sendReq(ip, matrix, point) {
       console.log(index);
       ips.splice(index,1);
       console.log(ips);
-      sendReq(ips[0],matrix,point);
+      return sendReq(ips[0],matrix,point);
     });
     request.write(postBody);
     request.end();
