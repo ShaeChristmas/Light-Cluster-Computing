@@ -90,7 +90,6 @@ function sendReq(ip, matrix, point) {
       response.on("end", () => {
         try {
           valueToReturn = JSON.parse(data);
-
           //console.log("Value to return: " + valueToReturn);
         } catch {
           reject(new Error(err));
@@ -450,7 +449,7 @@ app.get("/sendComp", (req, res) => {
     var rows = [];
     multiplyMatricesLocal(matrix, points).then((data) => {
       rows = data;
-      //console.log("Row outputs: ",rows);
+      console.log("Row outputs: ",rows);
       res.send([info.ip, rows]);
       busy = false;
     });
