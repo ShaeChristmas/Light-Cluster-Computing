@@ -100,12 +100,12 @@ function sendReq(ip, matrix, point) {
       });
     });
     request.on("error", () => {
-      console.log("rejected on ",ip);
+      console.log("rejected on ", ip);
       index = ips.indexOf(ip);
-      ips.splice(index,1);
-      return sendReq(ips[0],matrix,point).then((data) => {
+      ips.splice(index, 1);
+      return sendReq(ips[0], matrix, point).then((data) => {
         resolve({
-          returnRow: data.returnRow
+          returnRow: data.returnRow,
         });
       });
     });
@@ -120,7 +120,7 @@ function sendReqPi(ip, min, max) {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       min: min,
-      max: max
+      max: max,
     };
     //console.log("vorkin?");
     var postBody = querystring.stringify(body);
@@ -156,12 +156,12 @@ function sendReqPi(ip, min, max) {
       });
     });
     request.on("error", () => {
-      console.log("rejected on ",ip);
+      console.log("rejected on ", ip);
       index = ips.indexOf(ip);
-      ips.splice(index,1);
-      return sendReqPi(ips[0],min,max).then((data) => {
+      ips.splice(index, 1);
+      return sendReqPi(ips[0], min, max).then((data) => {
         resolve({
-          value: data.value
+          value: data.value,
         });
       });
     });
@@ -183,6 +183,8 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     .fill(0)
     .map(() => Array(size).fill(0));
   //console.log(newMatrix);
+
+  // Task allocation algorithm (more complex one could be put here)
   if (number == 0) {
     var nodev = ips.length;
   } else {
@@ -241,9 +243,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
 async function PiLocal(min, max) {
   //console.log("min: ",typeof min," max: ",typeof max);
   result = 0;
-  for (let n = parseInt(min)+1; n <= parseInt(max); n += 4) {
+  for (let n = parseInt(min) + 1; n <= parseInt(max); n += 4) {
     result += 4 / (n * (n + 1) * (n + 2));
-    result -= 4 / ((n+2) * (n + 3) * (n + 4));
+    result -= 4 / ((n + 2) * (n + 3) * (n + 4));
   }
   //console.log("result: ", result);
   return result;
@@ -253,11 +255,14 @@ async function calcPi(Accuracy, number = 0) {
   //console.log("Running Pi Calculation with Accuracy: ", Accuracy, ", Number: ", number);
   reps = Accuracy; // Hangs at 1000000000
   result = 3;
+
+  // Task allocation algorithm (more complex one could be put here)
   if (number == 0) {
     var nodev = ips.length;
   } else {
     var nodev = number;
   }
+
   body = {};
   promises = [];
   if (nodev == 1) {
@@ -275,13 +280,17 @@ async function calcPi(Accuracy, number = 0) {
     resultToSend = 0;
     for (let i = 0; i < nodev; i++) {
       //console.log("sending to node: ", ips[i]);
-      promises.push(sendReqPi(ips[i],i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
+      promises.push(
+        sendReqPi(ips[i], i * perdev + 1, (i + 1) * perdev + 1).then((data) => {
           resultToSend += data.value;
-        }));
+        })
+      );
     }
     await Promise.all(promises);
-    resultToSend +=3;
-    return { result: resultToSend.toString().replace(/(\.0*|(?<=(\..*))0*)$/, "") };
+    resultToSend += 3;
+    return {
+      result: resultToSend.toString().replace(/(\.0*|(?<=(\..*))0*)$/, ""),
+    };
   }
 }
 
@@ -303,6 +312,7 @@ let computation = info.comp;
 
 // Ask for Device Info
 app.get("/info", (req, res) => {
+  ips = require("./ips.json");
   // Filepath
   var options = {
     root: path.join(__dirname),
@@ -413,6 +423,7 @@ function reqComp(ip) {
 
 // Validation of Computation
 app.get("/compVal", async function (req, res) {
+  ips = require("./ips.json");
   ready = [];
   promises = [];
   for (let i = 0; i < ips.length; i++) {
@@ -430,6 +441,7 @@ app.get("/compVal", async function (req, res) {
 
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
+  ips = require("./ips.json");
   try {
     //console.log("/getComp: This runnig");
     //console.log(req)
