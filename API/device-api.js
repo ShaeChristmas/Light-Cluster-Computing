@@ -61,7 +61,7 @@ async function multiplyMatricesLocal(matrixA, points) {
 }
 
 function sendReq(ip, matrix, point) {
-  return new Promise((resolve, reject) => {
+  promise = new Promise((resolve, reject) => {
     //console.log("sendReq: "+ ip+ ' '+matrix)
     var body = {
       matrix: matrix,
@@ -120,6 +120,7 @@ function sendReq(ip, matrix, point) {
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
   });
+  return promise;
 }
 
 function sendReqPi(ip, min, max) {
