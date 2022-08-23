@@ -185,21 +185,23 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   //console.log(newMatrix);
 
   // Task allocation algorithm (more complex one could be put here)
-  /* All allocation of devices is based on the ips array. 
+  /* All allocation of devices is based on the ips array.
    * Changing the value of said array can be done here.
    * The ips array is reset whenever a _Client_ calls a function.
    * Number is the number of devices specified by Client. Is 0 by default,
    * but it can also safely be ignored, as it is only converted in the below code.
    * Additionally, device info retrieved can be used here too, increases complexity.
-   * 
-   * Example allocation function (Only uses every second device):
-   * var newIPS = []
-   * for (let i = 0; i < ips.length; i+=2) {  // Number could be used here as well, but you would need to validate its size.
-   *  newIPS.push(ips[i])
-   * }
-   * ips = newIPS
    */
-
+  var info = require("./local.json");
+  // Allocation method (Assign task to every even device)
+  if ((info.allocation = "even")) {
+    var newIPS = [];
+    for (let i = 0; i < ips.length; i += 2) {
+      // Number could be used here as well, but you would need to validate its size.
+      newIPS.push(ips[i]);
+    }
+    ips = newIPS;
+  }
   if (number == 0) {
     var nodev = ips.length;
   } else {
@@ -272,20 +274,24 @@ async function calcPi(Accuracy, number = 0) {
   result = 3;
 
   // Task allocation algorithm (more complex one could be put here)
-  /* All allocation of devices is based on the ips array. 
+  /* All allocation of devices is based on the ips array.
    * Changing the value of said array can be done here.
    * The ips array is reset whenever a _Client_ calls a function.
    * Number is the number of devices specified by Client. Is 0 by default,
    * but it can also safely be ignored, as it is only converted in the below code.
    * Additionally, device info retrieved can be used here too, increases complexity.
-   * 
-   * Example allocation function (Only uses every second device):
-   * var newIPS = []
-   * for (let i = 0; i < ips.length; i+=2) {  // Number could be used here as well, but you would need to validate its size.
-   *  newIPS.push(ips[i])
-   * }
-   * ips = newIPS
    */
+
+  // Allocation method (Assign task to every even device)
+  var info = require("./local.json");
+  if ((info.allocation = "even")) {
+    var newIPS = [];
+    for (let i = 0; i < ips.length; i += 2) {
+      // Number could be used here as well, but you would need to validate its size.
+      newIPS.push(ips[i]);
+    }
+    ips = newIPS;
+  }
 
   if (number == 0) {
     var nodev = ips.length;
