@@ -40,7 +40,7 @@ def main():
     #print('Computation')
     info['comp'] = getComp()
     #print(info.comp)
-
+    info['allocation'] = "none"
     #format to JSON
     print(info)
     #save to Textfile
