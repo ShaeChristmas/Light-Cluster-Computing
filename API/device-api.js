@@ -227,14 +227,14 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   var curcount = 0;
   for (let i = 0; i < nodev - 1; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
-    if (pointsToUse == []) {
+    curcount += amount;
+    
+    console.log("IP: ",ips[i],", Points: ", pointsToUse);
+    // Set each as promise
+    if (pointsToUse.toString == "[]") {
       console.log("ending");
       break;
     }
-    curcount += amount;
-
-    console.log("IP: ",ips[i],", Points: ", pointsToUse);
-    // Set each as promise
     promises.push(
       sendReq(ips[i], matrixA, pointsToUse).then((data) => {
         for (let j = 0; j < data.returnRow.length; j++) {
