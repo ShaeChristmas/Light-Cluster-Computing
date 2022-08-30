@@ -228,11 +228,14 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   for (let i = 0; i < nodev - 1; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
-    
-    console.log("IP: ",ips[i],", Points: ", pointsToUse);
+
+    console.log("IP: ", ips[i], ", Points: ", pointsToUse);
     // Set each as promise
-    console.log(pointsToUse[0][0]);
-    if (pointsToUse[0][0] == undefined) {
+    try {
+      if (pointsToUse[0][0] == undefined) {
+        console.log("shouldn't Print");
+      }
+    } catch {
       break;
     }
     promises.push(
@@ -246,16 +249,18 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   pointsToUse = points.slice(curcount, points.length);
   //console.log("Points: ", pointsToUse);
   // Set each as promise
-  if (pointsToUse.length > 0) {
-    promises.push(
-      sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
-        //console.log("SendReq Data: ",data);
-        for (let i = 0; i < data.returnRow.length; i++) {
-          newMatrix[(nodev - 1) * amount + i] = data.returnRow[i];
-          console.log(data.returnRow);
-        }
-      })
-    );
+  if (pointsToUse != undefined) {
+    if(pointsToUse.length > 0) {
+      promises.push(
+        sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
+          //console.log("SendReq Data: ",data);
+          for (let i = 0; i < data.returnRow.length; i++) {
+            newMatrix[(nodev - 1) * amount + i] = data.returnRow[i];
+            console.log(data.returnRow);
+          }
+        })
+      );
+    }
   }
   await Promise.all(promises);
   //console.log("Returning Matrix: ",newMatrix);
