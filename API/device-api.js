@@ -231,8 +231,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     
     console.log("IP: ",ips[i],", Points: ", pointsToUse);
     // Set each as promise
-    if (pointsToUse.toString == "[]") {
-      console.log("ending");
+    try {
+      console.log(pointsToUse[1]);
+    }catch{
       break;
     }
     promises.push(
