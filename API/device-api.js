@@ -50,7 +50,7 @@ async function multiplyMatricesLocal(matrixA, points) {
   //console.log("Matrix 1: " + matrixA);
   //console.log("Matrix 2: " + matrixB);
   matrixResult = [];
-  //console.log("Length: ", points.length);
+  console.log("Length: ", points.length);
   for (let i = 0; i < points.length; i++) {
     //console.log("MatrixA: " + matrixA);
     //console.log("Point: ", points[i]);
