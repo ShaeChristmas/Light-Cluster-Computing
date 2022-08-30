@@ -228,7 +228,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   amount = Math.ceil(num / nodev);
   //console.log("Amount: ", amount);
   var curcount = 0;
-  for (let i = 0; i < nodev - 1; i++) {
+  for (let i = 0; i < nodev; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
 
