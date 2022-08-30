@@ -222,6 +222,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   newMatrix = [];
   // Decide new rows to send to multiplyMatricesLocal.
   num = points.length;
+  if (nodev < num) {
+    nodev = num;
+  }
   amount = Math.ceil(num / nodev);
   console.log("Amount: ", amount);
   var curcount = 0;
