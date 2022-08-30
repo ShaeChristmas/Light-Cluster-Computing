@@ -248,6 +248,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
         //console.log("SendReq Data: ",data);
         for (let i = 0; i < data.returnRow.length; i++) {
           newMatrix[(nodev - 1) * amount + i] = data.returnRow[i];
+          console.log(data.returnRow);
         }
       })
     );
