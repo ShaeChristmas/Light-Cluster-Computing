@@ -46,7 +46,7 @@ function multiplyMatrixAndDot(matrix, point) {
 
 async function multiplyMatricesLocal(matrixA, points) {
   // iterate rows of matrixA
-  size = Math.sqrt(matrixA.length);
+  //size = Math.sqrt(matrixA.length);
   //console.log("Matrix 1: " + matrixA);
   //console.log("Matrix 2: " + matrixB);
   matrixResult = [];
@@ -223,7 +223,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   // Decide new rows to send to multiplyMatricesLocal.
   num = points.length;
   amount = Math.ceil(num / nodev);
-  //console.log("Amount: ", amount);
+  console.log("Amount: ", amount);
   var curcount = 0;
   for (let i = 0; i < nodev - 1; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
