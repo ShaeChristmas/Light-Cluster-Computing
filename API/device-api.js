@@ -227,6 +227,10 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   var curcount = 0;
   for (let i = 0; i < nodev - 1; i++) {
     pointsToUse = points.slice(curcount, curcount + amount);
+    if (pointsToUse.length == undefined) {
+      console.log("ending");
+      break;
+    }
     curcount += amount;
 
     console.log("IP: ",ips[i],", Points: ", pointsToUse);
