@@ -248,7 +248,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   }
   pointsToUse = points.slice(curcount, points.length);
   //console.log("Points: ", pointsToUse);
-  // Set each as promise
+  // Set each as promise, add to promises list
   if (pointsToUse.length >= 0) {
     promises.push(
       sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
