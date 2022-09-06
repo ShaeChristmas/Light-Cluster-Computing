@@ -226,6 +226,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     nodev = num-1;
   }
   amount = Math.ceil(num / nodev);
+  console.log("nodev ",nodev," amount ",amount," points ",points);
   //console.log("Amount: ", amount);
   var curcount = 0;
   for (let i = 0; i < nodev; i++) {
