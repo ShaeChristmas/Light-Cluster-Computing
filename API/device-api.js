@@ -223,7 +223,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   // Decide new rows to send to multiplyMatricesLocal.
   num = points.length;
   if (nodev >= num) {
-    nodev = num-1;
+    nodev = num;
   }
   amount = Math.ceil(num / nodev);
   console.log("nodev ",nodev," amount ",amount," points ",points);
@@ -233,8 +233,10 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
 
+    if(pointsToUse != []) {
     console.log("IP: ", ips[i], ", Points: ", pointsToUse);
     // Set each as promise
+
     promises.push(
       sendReq(ips[i], matrixA, pointsToUse).then((data) => {
         for (let j = 0; j < data.returnRow.length; j++) {
@@ -242,6 +244,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
         }
       })
     );
+    }
   }
   pointsToUse = points.slice(curcount, points.length);
   //console.log("Points: ", pointsToUse);
