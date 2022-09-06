@@ -53,7 +53,7 @@ async function multiplyMatricesLocal(matrixA, points) {
   console.log("Length: ", points.length);
   console.log(typeof(points));
   if(typeof(points) == typeof("string")) {
-    matrixResult[i] = multiplyMatrixAndDot(matrixA, points[0]);
+    matrixResult[i] = multiplyMatrixAndDot(matrixA, points);
   } else {
     for (let i = 0; i < points.length; i++) {
       //console.log("MatrixA: " + matrixA);
