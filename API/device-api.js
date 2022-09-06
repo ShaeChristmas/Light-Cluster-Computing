@@ -53,19 +53,14 @@ async function multiplyMatricesLocal(matrixA, points) {
   console.log("Length: ", points.length);
   console.log(typeof(points));
   if(typeof(points) == typeof("string")) {
-    console.log("Yes");
-    var arr = JSON.parse("[" + points + "]");
-    points = arr;
-  }
-  for (let i = 0; i < points.length; i++) {
-    //console.log("MatrixA: " + matrixA);
-    console.log(typeof(points));
-    if(typeof(points) == String) {
-      newPoints = points
+    matrixResult[i] = multiplyMatrixAndDot(matrixA, points[0]);
+  } else {
+    for (let i = 0; i < points.length; i++) {
+      //console.log("MatrixA: " + matrixA);
+      console.log("Points: ", points);
+      console.log("Point: ", points[i]);
+      matrixResult[i] = multiplyMatrixAndDot(matrixA, points[i]);
     }
-    console.log("Points: ", points);
-    console.log("Point: ", points[i]);
-    matrixResult[i] = multiplyMatrixAndDot(matrixA, points[i]);
   }
   //console.log(matrixResult);
   return matrixResult;
