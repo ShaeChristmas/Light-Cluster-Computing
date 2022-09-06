@@ -52,10 +52,11 @@ async function multiplyMatricesLocal(matrixA, points) {
   matrixResult = [];
   console.log("Length: ", points.length);
   console.log(typeof(points));
-    if(typeof(points) == String) {
-      var arr = JSON.parse("[" + points + "]");
-      points = arr;
-    }
+  if(typeof(points) == typeof("string")) {
+    console.log("Yes");
+    var arr = JSON.parse("[" + points + "]");
+    points = arr;
+  }
   for (let i = 0; i < points.length; i++) {
     //console.log("MatrixA: " + matrixA);
     console.log(typeof(points));
