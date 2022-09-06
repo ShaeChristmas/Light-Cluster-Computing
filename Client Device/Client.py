@@ -2,7 +2,7 @@
 import http.client, json, random, time, sys
 from unittest import result
 
-start_ip = "192.168.1.3"
+start_ip = "192.168.1.100"
 ips = []
 ready = []
 matrixTest = [1]
@@ -173,14 +173,14 @@ def localTime(matrix1, matrix2):
     print("Local Duration: ", stop-start)
     return [localResult, stop-start]
 
-def offTime(matrix1, matrix2, number):
+def offTime(matrix1, matrix2, number=0):
     offResult = createMatrix(len(matrix1),0)
     matrix1Temp = convMat(matrix2)
     matrix2Temp = convMat(matrix1)
     #start timer.
     start = time.time()
     # multiply
-    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.14", number)
+    offResult = multiply(matrix1Temp, matrix2Temp, start_ip, number)
     #stop timer.
     stop = time.time()
     print("Off Duration: ", stop-start)
@@ -207,7 +207,7 @@ def runTest1(size): # Tests the flexibility in the size of the computation
     #print(resultMatrixOff)
     if(resultMatrixLocal[0] == resultMatrixOff3[0] and resultMatrixLocal[0] == resultMatrixOff1[0]):
         QoS = True
-        print("All results are the same")
+        #print("All results are the same")
     file =open("results/results1.txt", "a")
     file.write(str(size)+","+str(resultMatrixLocal[1])+","+str(resultMatrixOff1[1])+","+str(resultMatrixOff3[1])+","+str(QoS)+"\n")
     file.close()
@@ -219,15 +219,19 @@ def runTest2(devices): # Tests the flexibility in the number of devices used.
     matrixA = createMatrix(10,1)
     matrixB = createMatrix(10,1)
 
-    resultVal = []
-    for i in range(0,devices):
-        resultVal[i] = multiply(matrixA,matrixB,number = i)
+    matrixA = convMat(matrixA)
+    matrixB = convMat(matrixB)
 
-    if(resultVal[1] == resultVal[2] and resultVal[2] == resultVal[3]):
-        QoS = True
-        print("All results are the same")
+    resultVal = []
+    for i in range(1,devices):
+        print(i)
+        resultVal.append(multiply(matrixA,matrixB,ip=start_ip,number=i))
+
+    #if(resultVal[0] == resultVal[2] and resultVal[2] == resultVal[1]):
+    #    QoS = True
+    #    #print("All results are the same")
     file =open("results/results2.txt", "a")
-    file.write(str(devices)+","+str(resultVal[0])+","+str(resultVal[1])+","+str(resultVal[2])+","+str(resultVal[3])+"\n")
+    file.write(str(devices)+","+str(resultVal[0])+","+str(resultVal[1])+","+str(resultVal[2])+"\n")
     file.close()
 
 def runTest3():
@@ -235,12 +239,10 @@ def runTest3():
     results = []
     resultString = "[accuracy, result], "
     for value in sizes:
-        results.append([value, CalcPi(value)])
-
+        results.append([value, CalcPi(value)["result"]])
+    #print(results)
     file =open("results/results3.txt", "a")
-    for value in results:
-        resultString.join(str(value)+", ")
-    file.write(resultString+"\n")
+    file.write(resultString+", "+str(results)+"\n")
     file.close()
 
 def runTest4(matrixA, matrixB):
@@ -248,10 +250,11 @@ def runTest4(matrixA, matrixB):
     resultBase = localTime(matrixA, matrixB)
     resultOff = offTime(matrixA, matrixB)
     valid = False
-    if (resultBase == resultOff):
+    #print(resultBase[0],resultOff[0])
+    if (resultBase[0] == resultOff[0]):
         valid = True
-    file =open("results/results5.txt", "a")
-    file.write("correct output: "+valid)
+    file =open("results/results4.txt", "a")
+    file.write("correct output: "+str(valid)+"\n")
     file.close()
 
 def runTest5(matrixA, matrixB):
@@ -259,11 +262,12 @@ def runTest5(matrixA, matrixB):
 
     resultBase = localTime(matrixA, matrixB)
     resultOff = offTime(matrixA, matrixB)
+    #print(resultBase,resultOff)
     valid = False
-    if (resultBase == resultOff):
+    if (resultBase[0] == resultOff[0]):
         valid = True
     file =open("results/results5.txt", "a")
-    file.write("correct output: "+valid)
+    file.write("correct output: "+str(valid)+"\n")
     file.close()
 
 def main():
@@ -271,39 +275,46 @@ def main():
     #file = open('results.txt', 'w')
     #file.write("Test Matrix size (num of rows), Time Locally, Time offloaded, Time offloaded with Distribution\n");
     #file.close()
+    #popIps(start_ip)
     # EXP 1 (System Validation): Test with different sizes
-    runTest1(10)
-    runTest1(20)
-    runTest1(30)
-    runTest1(40)
-    runTest1(50)
-    runTest1(60)
-    runTest1(70)
-    runTest1(80)
-    runTest1(90)
-    runTest1(100)
+    print("test 1: size of computation")
+    #runTest1(10)
+    #runTest1(20)
+    #runTest1(30)
+    #runTest1(40)
+    #runTest1(50)
+    #runTest1(60)
+    #runTest1(70)
+    #runTest1(80)
+    #runTest1(90)
+    #runTest1(100)
 
     # EXP 2 (System Scalability): # Test with number of devices.
-    runTest2(3) # Currently only have access to 3 devices.
+    print("test 2: number of devices")
+    runTest2(9) # Currently only have access to 9 devices.
 
     # EXP 3 (Computation Flexibility): # Test with different computations.
+    print("test 3: Calc accuracy of Pi")
     runTest3()
 
     # Required matrices for 4 and 5
-    matrix1 = createMatrix(100,1)
-    matrix2 = createMatrix(100,1)
+    matrix1 = createMatrix(10,1)
+    matrix2 = createMatrix(10,1)
+
     # EXP 4 (Resource Allocation): # Test with different allocation methods
+    print("test 4: allocation of resources")
     runTest4(matrix1, matrix2)
 
     # EXP 5 (Robustness): # Check system handling dropouts
+    print("test 5: robustness of system")
     runTest5(matrix1,matrix2)
 
-    offResult = createMatrix(len(matrix1),0)
-    matrix1Temp = convMat(matrix2)
-    matrix2Temp = convMat(matrix1)
+    #offResult = createMatrix(len(matrix1),0)
+    #matrix1Temp = convMat(matrix2)
+    #matrix2Temp = convMat(matrix1)
     # multiply
-    offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.15")
-    print(offResult)
+    # offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.15")
+    #print(offResult)
 
 
 
