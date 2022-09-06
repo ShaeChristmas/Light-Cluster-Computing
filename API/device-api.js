@@ -53,6 +53,7 @@ async function multiplyMatricesLocal(matrixA, points) {
   console.log("Length: ", points.length);
   for (let i = 0; i < points.length; i++) {
     //console.log("MatrixA: " + matrixA);
+    console.log("Points: ", points);
     console.log("Point: ", points[i]);
     matrixResult[i] = multiplyMatrixAndDot(matrixA, points[i]);
   }
