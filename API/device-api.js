@@ -248,7 +248,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   }
   //console.log("Points: ", pointsToUse);
   // Set each as promise, add to promises object
-  if (curcount == points.length) {
+  if (curcount != points.length) {
     pointsToUse = points.slice(curcount, points.length);
     console.log(nodev, ",",pointsToUse);
     promises.push(
