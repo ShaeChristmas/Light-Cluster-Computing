@@ -179,6 +179,7 @@ function sendReqPi(ip, min, max) {
 }
 
 function allocate() {
+  var info = require("./local.json");
   var newIPS = [];
   if ((info.allocation = "even")) {
     for (let i = 0; i < ips.length; i += 2) {
@@ -187,7 +188,17 @@ function allocate() {
     }
     return newIPS;
   } else if (info.allocation = "ready") {
-    
+    if (ready != []) {
+      for (var i =0; i < ready.length; i++) {
+        value = JSON.parse(ready[i])
+        if (value[1] = true) {
+          newIPS.push(value[0]);
+        }
+      }
+    }
+    return newIPS
+  } else {
+    return ips
   }
 }
 
@@ -212,16 +223,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
    * but it can also safely be ignored, as it is only converted in the below code.
    * Additionally, device info retrieved can be used here too, increases complexity.
    */
-  var info = require("./local.json");
-  // Allocation method (Assign task to every even device)
-  if ((info.allocation = "even")) {
-    var newIPS = [];
-    for (let i = 0; i < ips.length; i += 2) {
-      // Number could be used here as well, but you would need to validate its size.
-      newIPS.push(ips[i]);
-    }
-    ips = newIPS;
-  }
+  ips = allocate();
   if (number == 0) {
     var nodev = ips.length;
   } else {
@@ -508,7 +510,6 @@ app.get("/compVal", async function (req, res) {
 
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
-  console.log(ready);
   ips = require("./ips.json");
   try {
     //console.log("/getComp: This runnig");
