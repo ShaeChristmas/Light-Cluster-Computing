@@ -182,13 +182,13 @@ function allocate() {
   var info = require("./local.json");
   var newIPS = [];
   console.log(info.allocation);
-  if ((info.allocation = "even")) {
+  if ((info.allocation == "even")) {
     for (let i = 0; i < ips.length; i += 2) {
       // Number could be used here as well, but you would need to validate its size.
       newIPS.push(ips[i]);
     }
     return newIPS;
-  } else if (info.allocation = "ready") {
+  } else if (info.allocation == "ready") {
     if (ready != []) {
       console.log("Running 2", newIPS);
       for (var i =0; i < ready.length; i++) {
