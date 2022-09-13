@@ -216,14 +216,14 @@ def runTest2(devices): # Tests the flexibility in the number of devices used.
     print("Number of Devices: "+str(devices))
     QoS = True
     # Create matrix1 and matrix2
-    matrixA = createMatrix(10,1)
-    matrixB = createMatrix(10,1)
+    matrixA = createMatrix(80,1)
+    matrixB = createMatrix(80,1)
 
     matrixA = convMat(matrixA)
     matrixB = convMat(matrixB)
 
     resultVal = []
-    for i in range(1,devices):
+    for i in range(1,devices+1):
         print(i)
         resultVal.append(multiply(matrixA,matrixB,ip=start_ip,number=i))
 

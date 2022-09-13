@@ -181,7 +181,7 @@ function sendReqPi(ip, min, max) {
 function allocate() {
   var info = require("./local.json");
   var newIPS = [];
-  console.log(info.allocation);
+  //console.log(info.allocation);
   if ((info.allocation == "even")) {
     for (let i = 0; i < ips.length; i += 2) {
       newIPS.push(ips[i]);
@@ -190,7 +190,7 @@ function allocate() {
     if (ready.length == 0) {
       return ips
     }
-    console.log("Running 2", newIPS);
+    //console.log("Running 2", newIPS);
     for (var i =0; i < ready.length; i++) {
       value = JSON.parse(ready[i])
       if (value[1] = true) {
@@ -203,7 +203,7 @@ function allocate() {
         newIPS.push(ips[i]);
       }
     }
-    console.log(newIPS);
+    //console.log(newIPS);
   } else {
     return ips;
   }
@@ -265,7 +265,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     curcount += amount;
 
     if (pointsToUse.length != 0) {
-      console.log("IP: ", ips[i], ", Points: ", pointsToUse);
+      //console.log("IP: ", ips[i], ", Points: ", pointsToUse);
       // Set each as promise
       promises.push(
         sendReq(ips[i], matrixA, pointsToUse).then((data) => {
