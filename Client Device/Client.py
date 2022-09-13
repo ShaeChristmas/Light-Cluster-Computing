@@ -200,7 +200,7 @@ def runTest1(size): # Tests the flexibility in the size of the computation
     # Perform offloading with 1 device (Remember to start localhost API first)
     resultMatrixOff1 = offTime(matrixA, matrixB, number = 1)
     # Perform offloading with proposed Architecture
-    resultMatrixOff3 = offTime(matrixA, matrixB)
+    resultMatrixOff3 = offTime(matrixA, matrixB, number = 3)
     #print(matrixA)
     #print(matrixB)
     #print(resultMatrixLocal)
@@ -214,7 +214,7 @@ def runTest1(size): # Tests the flexibility in the size of the computation
 
 def runTest2(devices): # Tests the flexibility in the number of devices used.
     print("Number of Devices: "+str(devices))
-    QoS = False
+    QoS = True
     # Create matrix1 and matrix2
     matrixA = createMatrix(10,1)
     matrixB = createMatrix(10,1)
@@ -227,11 +227,11 @@ def runTest2(devices): # Tests the flexibility in the number of devices used.
         print(i)
         resultVal.append(multiply(matrixA,matrixB,ip=start_ip,number=i))
 
-    #if(resultVal[0] == resultVal[2] and resultVal[2] == resultVal[1]):
-    #    QoS = True
-    #    #print("All results are the same")
+    for i in range(len(resultVal)):
+        if resultVal[i] != resultVal[0]:
+            QoS = False
     file =open("results/results2.txt", "a")
-    file.write(str(devices)+","+str(resultVal[0])+","+str(resultVal[1])+","+str(resultVal[2])+"\n")
+    file.write(str(devices)+","+str(resultVal)+"\n")
     file.close()
 
 def runTest3():
@@ -246,15 +246,16 @@ def runTest3():
     file.close()
 
 def runTest4(matrixA, matrixB):
-    input("\n Please change the resource allocation method on "+start_ip+", then press any key to continue ...")
     resultBase = localTime(matrixA, matrixB)
-    resultOff = offTime(matrixA, matrixB)
-    valid = False
-    #print(resultBase[0],resultOff[0])
-    if (resultBase[0] == resultOff[0]):
-        valid = True
+    resultOff = []
+    input("\n Please change the resource allocation method on "+start_ip+" to even, then press any key to continue ...")
+    resultOff.append(offTime(matrixA, matrixB))
+    input("\n Please change the resource allocation method on "+start_ip+" to ready, then press any key to continue ...")
+    resultOff.append(offTime(matrixA, matrixB))
+    input("\n Please change the resource allocation method on "+start_ip+" to geo, then press any key to continue ...")
+    resultOff.append(offTime(matrixA, matrixB))
     file =open("results/results4.txt", "a")
-    file.write("correct output: "+str(valid)+"\n")
+    file.write("correct output: "+str(resultOff)+"\n")
     file.close()
 
 def runTest5(matrixA, matrixB):
