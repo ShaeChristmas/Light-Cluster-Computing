@@ -8,6 +8,7 @@ const querystring = require("query-string");
 // Is the device currently busy?
 var busy = false;
 var ips = require("./ips.json");
+var ready = [];
 //var matricies = require("./mats.json");
 
 const port = 5000;
@@ -175,6 +176,19 @@ function sendReqPi(ip, min, max) {
     request.end();
     //console.log("Outside: "+ JSON.stringify(request.end()));
   });
+}
+
+function allocate() {
+  var newIPS = [];
+  if ((info.allocation = "even")) {
+    for (let i = 0; i < ips.length; i += 2) {
+      // Number could be used here as well, but you would need to validate its size.
+      newIPS.push(ips[i]);
+    }
+    return newIPS;
+  } else if (info.allocation = "ready") {
+    
+  }
 }
 
 async function multiplyMatrices(matrixA, matrixB, number = 0) {
@@ -494,6 +508,7 @@ app.get("/compVal", async function (req, res) {
 
 // Sending of Computation - Client recieving and sending.
 app.get("/getComp", async function (req, res) {
+  console.log(ready);
   ips = require("./ips.json");
   try {
     //console.log("/getComp: This runnig");
