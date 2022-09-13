@@ -51,14 +51,14 @@ async function multiplyMatricesLocal(matrixA, points) {
   //console.log("Matrix 2: " + matrixB);
   matrixResult = [];
   //console.log("Length: ", points.length);
-  console.log(typeof points);
+  //console.log(typeof points);
   if (typeof points == typeof "string") {
     matrixResult[0] = multiplyMatrixAndDot(matrixA, points);
   } else {
     for (let i = 0; i < points.length; i++) {
       //console.log("MatrixA: " + matrixA);
-      console.log("Points: ", points);
-      console.log("Point: ", points[i]);
+      //console.log("Points: ", points);
+      //console.log("Point: ", points[i]);
       matrixResult[i] = multiplyMatrixAndDot(matrixA, points[i]);
     }
   }
@@ -222,7 +222,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
       point[j] = matrixB[j + size * i];
     }
     points.push(point);
-    // console.log("point: "+ point);
+    //console.log("point: "+ point);
     // Async before the below function works, but its technically sequential.
   }
   newMatrix = [];
@@ -232,7 +232,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     nodev = num;
   }
   amount = Math.ceil(num / nodev);
-  console.log("nodev ", nodev, " amount ", amount, " points ", points);
+  //console.log("nodev ", nodev, " amount ", amount, " points ", points);
   //console.log("Amount: ", amount);
   var curcount = 0;
   for (let i = 0; i < nodev; i++) {
@@ -240,7 +240,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     curcount += amount;
 
     if (pointsToUse.length != 0) {
-      console.log("IP: ", ips[i], ", Points: ", pointsToUse);
+      //console.log("IP: ", ips[i], ", Points: ", pointsToUse);
       // Set each as promise
       promises.push(
         sendReq(ips[i], matrixA, pointsToUse).then((data) => {
@@ -255,9 +255,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   // Set each as promise, add to promises object
   if (curcount != points.length) {
     pointsToUse = points.slice(curcount, points.length);
-    console.log(nodev, ",", pointsToUse, ",",pointsToUse.length);
+    //console.log(nodev, ",", pointsToUse, ",",pointsToUse.length);
     if (pointsToUse.length != 0) {
-      console.log("not running lmao");
+      //console.log("not running lmao");
       promises.push(
         sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
           //console.log("SendReq Data: ",data);
@@ -436,7 +436,7 @@ app.get("/infoReq", async (req, res) => {
 // Request for Computation Response
 app.get("/reqComp", (req, res) => {
   res.send([ip, !busy]);
-  console.log([ip, !busy]);
+  //console.log([ip, !busy]);
 });
 
 // RequestComp
@@ -513,7 +513,7 @@ app.get("/getComp", async function (req, res) {
     res.send(result); //req.body.matrixA
     //console.log("/getComp output: \n" + result);
   } catch (exception) {
-    console.log("oops");
+    //console.log("oops");
     console.log(exception);
   }
 });
