@@ -319,16 +319,7 @@ async function calcPi(Accuracy, number = 0) {
    */
 
   // Allocation method (Assign task to every even device)
-  var info = require("./local.json");
-  if ((info.allocation = "even")) {
-    var newIPS = [];
-    for (let i = 0; i < ips.length; i += 2) {
-      // Number could be used here as well, but you would need to validate its size.
-      newIPS.push(ips[i]);
-    }
-    ips = newIPS;
-  }
-
+  ips = allocate();
   if (number == 0) {
     var nodev = ips.length;
   } else {
