@@ -187,23 +187,23 @@ function allocate() {
       // Number could be used here as well, but you would need to validate its size.
       newIPS.push(ips[i]);
     }
-    return newIPS;
   } else if (info.allocation == "ready") {
-    if (ready != []) {
-      console.log("Running 2", newIPS);
-      for (var i =0; i < ready.length; i++) {
-        value = JSON.parse(ready[i])
-        if (value[1] = true) {
-          newIPS.push(value[0]);
-        }
-      }
-    }else {
-      console.log("error");
+    if (ready.length == 0) {
+      getReady(info.ip);
+      console.log(ready);
     }
-    return newIPS
+    console.log("Running 2", newIPS);
+    for (var i =0; i < ready.length; i++) {
+      value = JSON.parse(ready[i])
+      if (value[1] = true) {
+        newIPS.push(value[0]);
+      }
+    }
   } else {
-    return ips
+    return ips;
   }
+  return newIPS;
+
 }
 
 async function multiplyMatrices(matrixA, matrixB, number = 0) {
@@ -227,9 +227,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
    * but it can also safely be ignored, as it is only converted in the below code.
    * Additionally, device info retrieved can be used here too, increases complexity.
    */
-  console.log("Running 1");
   ips = allocate();
-  console.log("Running 3");
   if (number == 0) {
     var nodev = ips.length;
   } else {
@@ -495,6 +493,41 @@ function reqComp(ip) {
     request.end();
   });
 }
+
+function getReady(ip) {
+  return new Promise((resolve, reject) => {
+    var request = http.request(
+      {
+        host: ip,
+        port: 5000,
+        path: "/compVal",
+        method: "GET",
+        timeout: 500,
+      },
+      function (response) {
+        var data = "";
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          data += chunk;
+        });
+        response.on("end", () => {
+          //res.end(data);
+          resolve(data);
+        });
+      }
+    );
+    request.on("timeout", () => {
+      request.destroy();
+    });
+    request.on("error", function (err) {
+      console.log("error: Device " + ips[i] + " not found");
+      console.log("error Message: " + err);
+      reject("Not Found");
+    });
+    request.end();
+  });
+}
+
 
 // Validation of Computation
 app.get("/compVal", async function (req, res) {
