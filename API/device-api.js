@@ -181,6 +181,7 @@ function sendReqPi(ip, min, max) {
 function allocate() {
   var info = require("./local.json");
   var newIPS = [];
+  console.log(info.allocation);
   if ((info.allocation = "even")) {
     for (let i = 0; i < ips.length; i += 2) {
       // Number could be used here as well, but you would need to validate its size.
