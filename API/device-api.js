@@ -190,6 +190,7 @@ function allocate() {
     return newIPS;
   } else if (info.allocation = "ready") {
     if (ready != []) {
+      console.log("Running 2", newIPS);
       for (var i =0; i < ready.length; i++) {
         value = JSON.parse(ready[i])
         if (value[1] = true) {
@@ -199,7 +200,6 @@ function allocate() {
     }else {
       console.log("error");
     }
-    console.log("Running 2", newIPS);
     return newIPS
   } else {
     return ips
