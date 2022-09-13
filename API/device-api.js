@@ -195,6 +195,8 @@ function allocate() {
           newIPS.push(value[0]);
         }
       }
+    }else {
+      console.log("error");
     }
     return newIPS
   } else {
