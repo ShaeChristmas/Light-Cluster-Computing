@@ -486,7 +486,7 @@ function reqComp(ip) {
       request.destroy();
     });
     request.on("error", function (err) {
-      console.log("error: Device " + ips[i] + " not found");
+      console.log("error: Device " + ips + " not found");
       console.log("error Message: " + err);
       reject("Not Found");
     });
@@ -520,7 +520,7 @@ function getReady(ip) {
       request.destroy();
     });
     request.on("error", function (err) {
-      console.log("error: Device " + ips[i] + " not found");
+      console.log("error: Device " + ips + " not found");
       console.log("error Message: " + err);
       reject("Not Found");
     });
