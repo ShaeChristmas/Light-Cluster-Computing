@@ -219,19 +219,17 @@ def runTest2(devices): # Tests the flexibility in the number of devices used.
     matrixA = createMatrix(80,1)
     matrixB = createMatrix(80,1)
 
-    matrixA = convMat(matrixA)
-    matrixB = convMat(matrixB)
-
     resultVal = []
     for i in range(1,devices+1):
         print(i)
-        resultVal.append(multiply(matrixA,matrixB,ip=start_ip,number=i))
+        resultVal.append(offTime(matrixA,matrixB,number=i))
 
     for i in range(len(resultVal)):
-        if resultVal[i] != resultVal[0]:
+        if resultVal[i][0] != resultVal[0][0]:
             QoS = False
     file =open("results/results2.txt", "a")
-    file.write(str(devices)+","+str(resultVal)+"\n")
+    for i in range (len(resultVal)):
+        file.write(str(i+1)+","+str(resultVal[i])+"\n")
     file.close()
 
 def runTest3():
@@ -248,15 +246,16 @@ def runTest3():
 def runTest4(matrixA, matrixB):
     resultBase = localTime(matrixA, matrixB)
     resultOff = []
+    resultOff.append(offTime(matrixA, matrixB))
     input("\n Please change the resource allocation method on "+start_ip+" to even, then press any key to continue ...")
     resultOff.append(offTime(matrixA, matrixB))
     input("\n Please change the resource allocation method on "+start_ip+" to ready, then press any key to continue ...")
     resultOff.append(offTime(matrixA, matrixB))
     input("\n Please change the resource allocation method on "+start_ip+" to geo, then press any key to continue ...")
     resultOff.append(offTime(matrixA, matrixB))
-    file =open("results/results4.txt", "a")
-    file.write("correct output: "+str(resultOff)+"\n")
-    file.close()
+    #file =open("results/results4.txt", "a")
+    #file.write("correct output: "+str(resultOff)+"\n")
+    #file.close()
 
 def runTest5(matrixA, matrixB):
     input("\n Please quit one of the device API's, then press any key to continue ...")
@@ -271,13 +270,14 @@ def runTest5(matrixA, matrixB):
     file.write("correct output: "+str(valid)+"\n")
     file.close()
 
-def main():
+def mainTests():
     # Create File:
     #file = open('results.txt', 'w')
     #file.write("Test Matrix size (num of rows), Time Locally, Time offloaded, Time offloaded with Distribution\n");
     #file.close()
     #popIps(start_ip)
     # EXP 1 (System Validation): Test with different sizes
+    input ("Run test 1")
     print("test 1: size of computation")
     runTest1(10)
     runTest1(20)
@@ -292,10 +292,12 @@ def main():
 
     # EXP 2 (System Scalability): # Test with number of devices.
     print("test 2: number of devices")
+    input("Run test 2")
     runTest2(9) # Currently only have access to 9 devices.
 
     # EXP 3 (Computation Flexibility): # Test with different computations.
     print("test 3: Calc accuracy of Pi")
+    input ("run test 3")
     runTest3()
 
     # Required matrices for 4 and 5
@@ -304,20 +306,42 @@ def main():
 
     # EXP 4 (Resource Allocation): # Test with different allocation methods
     print("test 4: allocation of resources")
+    input("run test 4")
     runTest4(matrix1, matrix2)
 
     # EXP 5 (Robustness): # Check system handling dropouts
     print("test 5: robustness of system")
+    input("run test 5")
     runTest5(matrix1,matrix2)
 
-    #offResult = createMatrix(len(matrix1),0)
-    #matrix1Temp = convMat(matrix2)
-    #matrix2Temp = convMat(matrix1)
-    # multiply
-    # offResult = multiply(matrix1Temp, matrix2Temp, "192.168.1.15")
-    #print(offResult)
+def mainEngTests():
+    matrixA = createMatrix(100,1)
+    matrixB = createMatrix(100,1)
+    #(1) 100 matrix 1 dev time -
+    input("100 matrix 1 dev")
+    offTime(matrixA, matrixB, number = 1)
+    #(1) 100 matrix 3 dev time -
+    input("100 matrix 3 dev")
+    offTime(matrixA, matrixB, number = 3)
+    #(2) 100 matrix 9 dev time -
+    input("100 matrix 3 dev")
+    offTime(matrixA, matrixB, number = 9)
+    #(3) 100000 acc 1 dev time -
+    input("100000 acc 1 dev")
+    CalcPi(100000, number=1)
+    #(3) 100000 acc 9 dev time -
+    input("100000 acc 9 dev")
+    CalcPi(100000, number=9)
+    #(4) none method time - 
+    #(4) even method time -
+    #(4) ready method time -
+    #(4) geo method time -
+    input("Run using none method")
+    runTest4(matrixA,matrixB)
+
 
 
 
 if __name__ == "__main__":
-    main()
+    #mainTests()
+    mainEngTests()
