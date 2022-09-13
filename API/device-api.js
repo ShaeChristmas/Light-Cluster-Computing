@@ -184,7 +184,6 @@ function allocate() {
   console.log(info.allocation);
   if ((info.allocation == "even")) {
     for (let i = 0; i < ips.length; i += 2) {
-      // Number could be used here as well, but you would need to validate its size.
       newIPS.push(ips[i]);
     }
   } else if (info.allocation == "ready") {
@@ -198,6 +197,13 @@ function allocate() {
         newIPS.push(value[0]);
       }
     }
+  } else if (info.allocation == "geo") {
+    for (let i = 0; i < ips.length; i++) {
+      for (let j = 0; j <= i; j++) {
+        newIPS.push(ips[i]);
+      }
+    }
+    console.log(newIPS);
   } else {
     return ips;
   }
