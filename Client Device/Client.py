@@ -315,30 +315,31 @@ def mainTests():
     runTest5(matrix1,matrix2)
 
 def mainEngTests():
-    matrixA = createMatrix(100,1)
-    matrixB = createMatrix(100,1)
-    #(1) 100 matrix 1 dev time -
-    input("100 matrix 1 dev")
+    # Started at 6:38 - 1663022280
+    matrixA = createMatrix(80,1)
+    matrixB = createMatrix(80,1)
+    #(1) 100 matrix 1 dev time - 6:38:30 - 	1663022310
+    input("80 matrix 1 dev")
     offTime(matrixA, matrixB, number = 1)
-    #(1) 100 matrix 3 dev time -
-    input("100 matrix 3 dev")
+    #(1) 100 matrix 3 dev time - 6:39 - 1663022340
+    input("80 matrix 3 dev")
     offTime(matrixA, matrixB, number = 3)
-    #(2) 100 matrix 9 dev time -
-    input("100 matrix 3 dev")
-    offTime(matrixA, matrixB, number = 9)
-    #(3) 100000 acc 1 dev time -
+    #(2) 100 matrix 9 dev time - 6:40 - 1663022400
+    input("80 matrix 9 dev")
+    offTime(matrixA, matrixB, number = 0)
+    #(3) 100000 acc 1 dev time - 6:41 - 1663022460
     input("100000 acc 1 dev")
     CalcPi(100000, number=1)
-    #(3) 100000 acc 9 dev time -
+    #(3) 100000 acc 9 dev time - 6:41:30 - 1663022490
     input("100000 acc 9 dev")
-    CalcPi(100000, number=9)
-    #(4) none method time - 
-    #(4) even method time -
-    #(4) ready method time -
-    #(4) geo method time -
+    CalcPi(100000, number=0)
+    #(4) none method time - 6:42 - 5 secs - 1663022515
+    #(4) even method time - 6:43:30 - 1663022610
+    #(4) ready method time - 6:44:30 - 1663022670
+    #(4) geo method time - 6:46 - 1663022760 -> doesn't survive geometric allocation (request is left waiting too long)
     input("Run using none method")
     runTest4(matrixA,matrixB)
-
+    # Ended at 6:49 - 1663022940
 
 
 
