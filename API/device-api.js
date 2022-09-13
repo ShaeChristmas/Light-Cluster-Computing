@@ -180,6 +180,7 @@ function sendReqPi(ip, min, max) {
 
 function allocate() {
   var info = require("./local.json");
+  console.log("Running 2");
   var newIPS = [];
   if ((info.allocation = "even")) {
     for (let i = 0; i < ips.length; i += 2) {
@@ -225,7 +226,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
    * but it can also safely be ignored, as it is only converted in the below code.
    * Additionally, device info retrieved can be used here too, increases complexity.
    */
+  console.log("Running 1");
   ips = allocate();
+  console.log("Running 3");
   if (number == 0) {
     var nodev = ips.length;
   } else {
