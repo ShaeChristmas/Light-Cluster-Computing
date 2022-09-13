@@ -239,7 +239,7 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
 
-    if (pointsToUse.toString() != "[]") {
+    if (pointsToUse.length != 0) {
       console.log("IP: ", ips[i], ", Points: ", pointsToUse);
       // Set each as promise
       promises.push(
