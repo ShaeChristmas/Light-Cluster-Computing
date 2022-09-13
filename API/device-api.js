@@ -180,7 +180,6 @@ function sendReqPi(ip, min, max) {
 
 function allocate() {
   var info = require("./local.json");
-  console.log("Running 2");
   var newIPS = [];
   if ((info.allocation = "even")) {
     for (let i = 0; i < ips.length; i += 2) {
@@ -199,6 +198,7 @@ function allocate() {
     }else {
       console.log("error");
     }
+    console.log("Running 2", newIPS);
     return newIPS
   } else {
     return ips
