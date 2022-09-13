@@ -256,7 +256,8 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
   if (curcount != points.length) {
     pointsToUse = points.slice(curcount, points.length);
     console.log(nodev, ",", pointsToUse, ",",pointsToUse.length);
-    if (pointsToUse.toString() != "[]") {
+    if (pointsToUse.length != 0) {
+      console.log("not running lmao");
       promises.push(
         sendReq(ips[nodev], matrixA, pointsToUse).then((data) => {
           //console.log("SendReq Data: ",data);
