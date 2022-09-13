@@ -50,7 +50,7 @@ async function multiplyMatricesLocal(matrixA, points) {
   //console.log("Matrix 1: " + matrixA);
   //console.log("Matrix 2: " + matrixB);
   matrixResult = [];
-  console.log("Length: ", points.length);
+  //console.log("Length: ", points.length);
   console.log(typeof(points));
   if(typeof(points) == typeof("string")) {
     matrixResult[0] = multiplyMatrixAndDot(matrixA, points);
@@ -239,10 +239,9 @@ async function multiplyMatrices(matrixA, matrixB, number = 0) {
     pointsToUse = points.slice(curcount, curcount + amount);
     curcount += amount;
 
-    if(pointsToUse != []) {
+    if(pointsToUse.toString() != "[]") {
     console.log("IP: ", ips[i], ", Points: ", pointsToUse);
     // Set each as promise
-
     promises.push(
       sendReq(ips[i], matrixA, pointsToUse).then((data) => {
         for (let j = 0; j < data.returnRow.length; j++) {
